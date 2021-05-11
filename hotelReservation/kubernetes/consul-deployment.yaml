@@ -25,7 +25,6 @@ spec:
       labels:
         io.kompose.service: consul
     spec:
-      nodeName: r07
       containers:
         - image: consul:latest
           name: consul
@@ -38,5 +37,12 @@ spec:
           resources:
             limits:
               cpu: 1000m
+#          env:
+#          - name: http_proxy
+#            value: ${http_proxy}
+#          - name: https_proxy
+#            value: ${https_proxy}
+#          - name: no_proxy
+#            value: ${no_proxy}
       restartPolicy: Always
 status: {}

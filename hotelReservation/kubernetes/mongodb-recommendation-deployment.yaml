@@ -26,7 +26,6 @@ spec:
       labels:
         io.kompose.service: mongodb-recommendation
     spec:
-      nodeName: r13
       containers:
         - image: mongo
           name: hotel-reserv-recommendation-mongo
@@ -35,13 +34,6 @@ spec:
           resources:
             limits:
               cpu: 1000m
-          volumeMounts:
-            - mountPath: /data/db
-              name: recommendation
       hostname: recommendation-db
       restartPolicy: Always
-      volumes:
-        - name: recommendation
-          persistentVolumeClaim:
-            claimName: recommendation-pvc
 status: {}

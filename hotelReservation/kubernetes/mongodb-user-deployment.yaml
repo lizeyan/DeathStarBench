@@ -13,8 +13,8 @@ spec:
   selector:
     matchLabels:
       io.kompose.service: mongodb-user
-  strategy:
-    type: Recreate
+#  strategy:
+#    type: Recreate
   template:
     metadata:
       annotations:
@@ -26,7 +26,6 @@ spec:
       labels:
         io.kompose.service: mongodb-user
     spec:
-      nodeName: r13
       containers:
         - image: mongo
           name: hotel-reserv-user-mongo
@@ -35,13 +34,6 @@ spec:
           resources:
             limits:
               cpu: 1000m
-          volumeMounts:
-            - mountPath: /data/db
-              name: user
       hostname: user-db
       restartPolicy: Always
-      volumes:
-        - name: user
-          persistentVolumeClaim:
-            claimName: user-pvc
 status: {}

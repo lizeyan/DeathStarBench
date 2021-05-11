@@ -26,7 +26,6 @@ spec:
       labels:
         io.kompose.service: mongodb-rate
     spec:
-      nodeName: r10
       containers:
         - image: mongo
           name: hotel-reserv-rate-mongo
@@ -35,12 +34,5 @@ spec:
           resources:
             limits:
               cpu: 1000m
-          volumeMounts:
-            - mountPath: /data/db
-              name: rate
       restartPolicy: Always
-      volumes:
-        - name: rate
-          persistentVolumeClaim:
-            claimName: rate-pvc
 status: {}

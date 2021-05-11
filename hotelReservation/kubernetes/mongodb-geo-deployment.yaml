@@ -26,7 +26,6 @@ spec:
       labels:
         io.kompose.service: mongodb-geo
     spec:
-      nodeName: r10
       containers:
         - image: mongo
           name: hotel-reserv-geo-mongo
@@ -35,12 +34,5 @@ spec:
           resources:
             limits:
               cpu: 1000m
-          volumeMounts:
-            - mountPath: /data/db
-              name: geo
       restartPolicy: Always
-      volumes:
-        - name: geo
-          persistentVolumeClaim:
-            claimName: geo-pvc
 status: {}

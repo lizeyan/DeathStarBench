@@ -5,7 +5,8 @@ cd $(dirname $0)/..
 
 EXEC=docker
 
-USER="salehsedghpour"
+REPO="docker.peidan.me/"
+USER="lizytalk"
 
 TAG="latest"
 
@@ -18,8 +19,8 @@ do
   IMAGE=hotel_reserv_${i}_single_node
   echo Processing image ${IMAGE}
   cd $ROOT_FOLDER
-  $EXEC build -t "$USER"/"$IMAGE":"$TAG" -f Dockerfile .
-  $EXEC push "$USER"/"$IMAGE":"$TAG"
+  $EXEC build -t "$REPO$USER"/"$IMAGE":"$TAG" -f Dockerfile .
+  $EXEC push "$REPO$USER"/"$IMAGE":"$TAG"
   cd $ROOT_FOLDER
 
   echo

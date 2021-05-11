@@ -26,7 +26,6 @@ spec:
       labels:
         io.kompose.service: mongodb-reservation
     spec:
-      nodeName: r13
       containers:
         - image: mongo
           name: hotel-reserv-reservation-mongo
@@ -35,13 +34,6 @@ spec:
           resources:
             limits:
               cpu: 1000m
-          volumeMounts:
-            - mountPath: /data/db
-              name: reservation
       hostname: reservation-db
       restartPolicy: Always
-      volumes:
-        - name: reservation
-          persistentVolumeClaim:
-            claimName: reservation-pvc
 status: {}

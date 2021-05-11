@@ -25,16 +25,22 @@ spec:
       labels:
         io.kompose.service: geo
     spec:
-      nodeName: r08
       containers:
         - command:
             - geo
-          image: salehsedghpour/hotel_reserv_geo_single_node
+          image: docker.peidan.me/lizytalk/hotel_reserv_geo_single_node
           name: hotel-reserv-geo
           ports:
             - containerPort: 8083
           resources:
             limits:
               cpu: 1000m
+#          env:
+#          - name: http_proxy
+#            value: ${http_proxy}
+#          - name: https_proxy
+#            value: ${https_proxy}
+#          - name: no_proxy
+#            value: ${no_proxy}
       restartPolicy: Always
 status: {}
