@@ -46,10 +46,9 @@ function _M.RegisterUser()
       ngx.log(ngx.ERR, "User registration failure: " .. err.message)
     end
     ngx.exit(ngx.HTTP_INTERNAL_SERVER_ERROR)
-  else
-    ngx.redirect("../../index.html")
-    ngx.exit(ngx.HTTP_OK)
   end
+
+
   span:finish()
 end
 

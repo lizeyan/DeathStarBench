@@ -1273,6 +1273,4 @@ function SocialGraphServiceProcessor:process_InsertUser(seqid, iprot, oprot, ser
   oprot.trans:flush()
 end
 
-return {
-  SocialGraphServiceClient = SocialGraphServiceClient
-}
+return SocialGraphServiceClient

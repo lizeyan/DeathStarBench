@@ -8,14 +8,13 @@ function _M.RegisterUser()
   local bridge_tracer = require "opentracing_bridge_tracer"
   local ngx = ngx
   local GenericObjectPool = require "GenericObjectPool"
-  local social_network_UserService = require "social_network_UserService"
-  local UserServiceClient = social_network_UserService.UserServiceClient
+  local UserServiceClient = require "social_network_UserService"
 
   local req_id = tonumber(string.sub(ngx.var.request_id, 0, 15), 16)
   local tracer = bridge_tracer.new_from_global()
   local parent_span_context = tracer:binary_extract(
       ngx.var.opentracing_binary_context)
-  local span = tracer:start_span("register_client",
+  local span = tracer:start_span("RegisterUser",
       {["references"] = {{"child_of", parent_span_context}}})
   local carrier = {}
   tracer:text_map_inject(span:context(), carrier)
@@ -36,6 +35,7 @@ function _M.RegisterUser()
 
   local status, err = pcall(client.RegisterUserWithId, client, req_id, post.first_name,
       post.last_name, post.username, post.password, tonumber(post.user_id), carrier)
+  GenericObjectPool:returnConnection(client)
 
   if not status then
     ngx.status = ngx.HTTP_INTERNAL_SERVER_ERROR
@@ -43,15 +43,13 @@ function _M.RegisterUser()
       ngx.say("User registration failure: " .. err.message)
       ngx.log(ngx.ERR, "User registration failure: " .. err.message)
     else
-      ngx.say("User registration failure: " .. err)
-      ngx.log(ngx.ERR, "User registration failure: " .. err)
+      ngx.say("User registration failure: " .. err.message)
+      ngx.log(ngx.ERR, "User registration failure: " .. err.message)
     end
-    client.iprot.trans:close()
     ngx.exit(ngx.HTTP_INTERNAL_SERVER_ERROR)
   end
 
-  ngx.say("Success!")
-  GenericObjectPool:returnConnection(client)
+
   span:finish()
 end
 

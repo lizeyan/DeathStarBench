@@ -8,14 +8,13 @@ function _M.Follow()
   local bridge_tracer = require "opentracing_bridge_tracer"
   local ngx = ngx
   local GenericObjectPool = require "GenericObjectPool"
-  local social_network_SocialGraphService = require "social_network_SocialGraphService"
-  local SocialGraphServiceClient = social_network_SocialGraphService.SocialGraphServiceClient
+  local SocialGraphServiceClient = require "social_network_SocialGraphService"
 
   local req_id = tonumber(string.sub(ngx.var.request_id, 0, 15), 16)
   local tracer = bridge_tracer.new_from_global()
   local parent_span_context = tracer:binary_extract(
       ngx.var.opentracing_binary_context)
-  local span = tracer:start_span("follow_client",
+  local span = tracer:start_span("Follow",
       {["references"] = {{"child_of", parent_span_context}}})
   local carrier = {}
   tracer:text_map_inject(span:context(), carrier)
@@ -43,19 +42,11 @@ function _M.Follow()
 
   if not status then
     ngx.status = ngx.HTTP_INTERNAL_SERVER_ERROR
-    if (err.message) then
-      ngx.say("Follow Failed: " .. err.message)
-      ngx.log(ngx.ERR, "Follow Failed: " .. err.message)
-    else
-      ngx.say("Follow Failed: " .. err)
-      ngx.log(ngx.ERR, "Follow Failed: " .. err)
-    end
-    client.iprot.trans:close()
+    ngx.say("Follow Failed: " .. err.message)
+    ngx.log(ngx.ERR, "Follow Failed: " .. err.message)
     ngx.exit(ngx.HTTP_INTERNAL_SERVER_ERROR)
-  else
-    ngx.say("Success!")
-    GenericObjectPool:returnConnection(client)
   end
+  GenericObjectPool:returnConnection(client)
   span:finish()
 
 end
