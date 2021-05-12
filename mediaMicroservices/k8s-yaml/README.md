@@ -3,7 +3,7 @@
 ## Pre-requirements
 
 - A running kubernetes cluster is needed.
-- This repo should be put in the same path on every node of the cluster for volume mount (here we use `/root/DeathStarBench/`).
+- This repo should be put in the same path on every node of the cluster for volume mount (here we use `/mnt/mfs/DeathStarBench/`).
 - Pre-requirements mentioned [here](https://github.com/delimitrou/DeathStarBench/blob/master/mediaMicroservices/README.md) should be met.
 
 ## Running the media service application

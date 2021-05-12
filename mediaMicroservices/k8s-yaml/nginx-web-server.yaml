@@ -52,17 +52,17 @@ spec:
       volumes:
       - name: lua-scripts
         hostPath: 
-          path: /root/DeathStarBench/mediaMicroservices/nginx-web-server/lua-scripts-k8s
+          path: /mnt/mfs/DeathStarBench/mediaMicroservices/nginx-web-server/lua-scripts-k8s
           type: Directory
       - name: nginx-conf
         hostPath: 
-          path: /root/DeathStarBench/mediaMicroservices/nginx-web-server/conf/nginx-k8s.conf
+          path: /mnt/mfs/DeathStarBench/mediaMicroservices/nginx-web-server/conf/nginx-k8s.conf
           type: File
       - name: jaeger-config-json
         hostPath: 
-          path: /root/DeathStarBench/mediaMicroservices/nginx-web-server/jaeger-config.json
+          path: /mnt/mfs/DeathStarBench/mediaMicroservices/nginx-web-server/jaeger-config.json
           type: File
       - name: gen-lua
         hostPath: 
-          path: /root/DeathStarBench/mediaMicroservices/gen-lua
+          path: /mnt/mfs/DeathStarBench/mediaMicroservices/gen-lua
           type: Directory

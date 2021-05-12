@@ -72,6 +72,17 @@ spec:
         env:
         - name: COLLECTOR_ZIPKIN_HTTP_PORT
           value: "9411"
+        - name: SPAN_STORAGE_TYPE
+          value: "elasticsearch"
+        - name: ES_SERVER_URLS
+          value: "http://es-es-http:9200"
+        - name: ES_USERNAME
+          value: "elastic"
+        - name: ES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: es-es-elastic-user
+              key: elastic
         ports: 
         - containerPort: 16686
       restartPolicy: Always
