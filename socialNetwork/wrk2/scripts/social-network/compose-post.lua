@@ -62,7 +62,9 @@ request = function()
   media_types = media_types:sub(1, #media_types - 1) .. "]"
 
   local method = "POST"
-  local path = "http://localhost:8080/wrk2-api/post/compose"
+  -- Use your cluster-ip here:
+  -- original: local path = "http://10.68.39.88:8080/wrk2-api/post/compose"
+  local path = "http://10.108.29.192:8080/wrk2-api/post/compose"
   local headers = {}
   local body
   headers["Content-Type"] = "application/x-www-form-urlencoded"

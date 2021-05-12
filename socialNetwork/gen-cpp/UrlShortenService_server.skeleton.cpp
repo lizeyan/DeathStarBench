@@ -20,9 +20,9 @@ class UrlShortenServiceHandler : virtual public UrlShortenServiceIf {
     // Your initialization goes here
   }
 
-  void ComposeUrls(std::vector<Url> & _return, const int64_t req_id, const std::vector<std::string> & urls, const std::map<std::string, std::string> & carrier) {
+  void UploadUrls(std::vector<std::string> & _return, const int64_t req_id, const std::vector<std::string> & urls, const std::map<std::string, std::string> & carrier) {
     // Your implementation goes here
-    printf("ComposeUrls\n");
+    printf("UploadUrls\n");
   }
 
   void GetExtendedUrls(std::vector<std::string> & _return, const int64_t req_id, const std::vector<std::string> & shortened_urls, const std::map<std::string, std::string> & carrier) {

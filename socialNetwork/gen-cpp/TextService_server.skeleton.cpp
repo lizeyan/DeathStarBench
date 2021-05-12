@@ -20,9 +20,9 @@ class TextServiceHandler : virtual public TextServiceIf {
     // Your initialization goes here
   }
 
-  void ComposeText(TextServiceReturn& _return, const int64_t req_id, const std::string& text, const std::map<std::string, std::string> & carrier) {
+  void UploadText(const int64_t req_id, const std::string& text, const std::map<std::string, std::string> & carrier) {
     // Your implementation goes here
-    printf("ComposeText\n");
+    printf("UploadText\n");
   }
 
 };

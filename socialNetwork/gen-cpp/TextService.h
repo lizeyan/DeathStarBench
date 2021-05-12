@@ -21,7 +21,7 @@ namespace social_network {
 class TextServiceIf {
  public:
   virtual ~TextServiceIf() {}
-  virtual void ComposeText(TextServiceReturn& _return, const int64_t req_id, const std::string& text, const std::map<std::string, std::string> & carrier) = 0;
+  virtual void UploadText(const int64_t req_id, const std::string& text, const std::map<std::string, std::string> & carrier) = 0;
 };
 
 class TextServiceIfFactory {
@@ -51,32 +51,32 @@ class TextServiceIfSingletonFactory : virtual public TextServiceIfFactory {
 class TextServiceNull : virtual public TextServiceIf {
  public:
   virtual ~TextServiceNull() {}
-  void ComposeText(TextServiceReturn& /* _return */, const int64_t /* req_id */, const std::string& /* text */, const std::map<std::string, std::string> & /* carrier */) {
+  void UploadText(const int64_t /* req_id */, const std::string& /* text */, const std::map<std::string, std::string> & /* carrier */) {
     return;
   }
 };
 
-typedef struct _TextService_ComposeText_args__isset {
-  _TextService_ComposeText_args__isset() : req_id(false), text(false), carrier(false) {}
+typedef struct _TextService_UploadText_args__isset {
+  _TextService_UploadText_args__isset() : req_id(false), text(false), carrier(false) {}
   bool req_id :1;
   bool text :1;
   bool carrier :1;
-} _TextService_ComposeText_args__isset;
+} _TextService_UploadText_args__isset;
 
-class TextService_ComposeText_args {
+class TextService_UploadText_args {
  public:
 
-  TextService_ComposeText_args(const TextService_ComposeText_args&);
-  TextService_ComposeText_args& operator=(const TextService_ComposeText_args&);
-  TextService_ComposeText_args() : req_id(0), text() {
+  TextService_UploadText_args(const TextService_UploadText_args&);
+  TextService_UploadText_args& operator=(const TextService_UploadText_args&);
+  TextService_UploadText_args() : req_id(0), text() {
   }
 
-  virtual ~TextService_ComposeText_args() throw();
+  virtual ~TextService_UploadText_args() throw();
   int64_t req_id;
   std::string text;
   std::map<std::string, std::string>  carrier;
 
-  _TextService_ComposeText_args__isset __isset;
+  _TextService_UploadText_args__isset __isset;
 
   void __set_req_id(const int64_t val);
 
@@ -84,7 +84,7 @@ class TextService_ComposeText_args {
 
   void __set_carrier(const std::map<std::string, std::string> & val);
 
-  bool operator == (const TextService_ComposeText_args & rhs) const
+  bool operator == (const TextService_UploadText_args & rhs) const
   {
     if (!(req_id == rhs.req_id))
       return false;
@@ -94,11 +94,11 @@ class TextService_ComposeText_args {
       return false;
     return true;
   }
-  bool operator != (const TextService_ComposeText_args &rhs) const {
+  bool operator != (const TextService_UploadText_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const TextService_ComposeText_args & ) const;
+  bool operator < (const TextService_UploadText_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -106,11 +106,11 @@ class TextService_ComposeText_args {
 };
 
 
-class TextService_ComposeText_pargs {
+class TextService_UploadText_pargs {
  public:
 
 
-  virtual ~TextService_ComposeText_pargs() throw();
+  virtual ~TextService_UploadText_pargs() throw();
   const int64_t* req_id;
   const std::string* text;
   const std::map<std::string, std::string> * carrier;
@@ -119,64 +119,56 @@ class TextService_ComposeText_pargs {
 
 };
 
-typedef struct _TextService_ComposeText_result__isset {
-  _TextService_ComposeText_result__isset() : success(false), se(false) {}
-  bool success :1;
+typedef struct _TextService_UploadText_result__isset {
+  _TextService_UploadText_result__isset() : se(false) {}
   bool se :1;
-} _TextService_ComposeText_result__isset;
+} _TextService_UploadText_result__isset;
 
-class TextService_ComposeText_result {
+class TextService_UploadText_result {
  public:
 
-  TextService_ComposeText_result(const TextService_ComposeText_result&);
-  TextService_ComposeText_result& operator=(const TextService_ComposeText_result&);
-  TextService_ComposeText_result() {
+  TextService_UploadText_result(const TextService_UploadText_result&);
+  TextService_UploadText_result& operator=(const TextService_UploadText_result&);
+  TextService_UploadText_result() {
   }
 
-  virtual ~TextService_ComposeText_result() throw();
-  TextServiceReturn success;
+  virtual ~TextService_UploadText_result() throw();
   ServiceException se;
 
-  _TextService_ComposeText_result__isset __isset;
-
-  void __set_success(const TextServiceReturn& val);
+  _TextService_UploadText_result__isset __isset;
 
   void __set_se(const ServiceException& val);
 
-  bool operator == (const TextService_ComposeText_result & rhs) const
+  bool operator == (const TextService_UploadText_result & rhs) const
   {
-    if (!(success == rhs.success))
-      return false;
     if (!(se == rhs.se))
       return false;
     return true;
   }
-  bool operator != (const TextService_ComposeText_result &rhs) const {
+  bool operator != (const TextService_UploadText_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const TextService_ComposeText_result & ) const;
+  bool operator < (const TextService_UploadText_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _TextService_ComposeText_presult__isset {
-  _TextService_ComposeText_presult__isset() : success(false), se(false) {}
-  bool success :1;
+typedef struct _TextService_UploadText_presult__isset {
+  _TextService_UploadText_presult__isset() : se(false) {}
   bool se :1;
-} _TextService_ComposeText_presult__isset;
+} _TextService_UploadText_presult__isset;
 
-class TextService_ComposeText_presult {
+class TextService_UploadText_presult {
  public:
 
 
-  virtual ~TextService_ComposeText_presult() throw();
-  TextServiceReturn* success;
+  virtual ~TextService_UploadText_presult() throw();
   ServiceException se;
 
-  _TextService_ComposeText_presult__isset __isset;
+  _TextService_UploadText_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -207,9 +199,9 @@ class TextServiceClient : virtual public TextServiceIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void ComposeText(TextServiceReturn& _return, const int64_t req_id, const std::string& text, const std::map<std::string, std::string> & carrier);
-  void send_ComposeText(const int64_t req_id, const std::string& text, const std::map<std::string, std::string> & carrier);
-  void recv_ComposeText(TextServiceReturn& _return);
+  void UploadText(const int64_t req_id, const std::string& text, const std::map<std::string, std::string> & carrier);
+  void send_UploadText(const int64_t req_id, const std::string& text, const std::map<std::string, std::string> & carrier);
+  void recv_UploadText();
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -225,11 +217,11 @@ class TextServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   typedef  void (TextServiceProcessor::*ProcessFunction)(int32_t, ::apache::thrift::protocol::TProtocol*, ::apache::thrift::protocol::TProtocol*, void*);
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
-  void process_ComposeText(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_UploadText(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   TextServiceProcessor(::apache::thrift::stdcxx::shared_ptr<TextServiceIf> iface) :
     iface_(iface) {
-    processMap_["ComposeText"] = &TextServiceProcessor::process_ComposeText;
+    processMap_["UploadText"] = &TextServiceProcessor::process_UploadText;
   }
 
   virtual ~TextServiceProcessor() {}
@@ -258,14 +250,13 @@ class TextServiceMultiface : virtual public TextServiceIf {
     ifaces_.push_back(iface);
   }
  public:
-  void ComposeText(TextServiceReturn& _return, const int64_t req_id, const std::string& text, const std::map<std::string, std::string> & carrier) {
+  void UploadText(const int64_t req_id, const std::string& text, const std::map<std::string, std::string> & carrier) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->ComposeText(_return, req_id, text, carrier);
+      ifaces_[i]->UploadText(req_id, text, carrier);
     }
-    ifaces_[i]->ComposeText(_return, req_id, text, carrier);
-    return;
+    ifaces_[i]->UploadText(req_id, text, carrier);
   }
 
 };
@@ -298,9 +289,9 @@ class TextServiceConcurrentClient : virtual public TextServiceIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void ComposeText(TextServiceReturn& _return, const int64_t req_id, const std::string& text, const std::map<std::string, std::string> & carrier);
-  int32_t send_ComposeText(const int64_t req_id, const std::string& text, const std::map<std::string, std::string> & carrier);
-  void recv_ComposeText(TextServiceReturn& _return, const int32_t seqid);
+  void UploadText(const int64_t req_id, const std::string& text, const std::map<std::string, std::string> & carrier);
+  int32_t send_UploadText(const int64_t req_id, const std::string& text, const std::map<std::string, std::string> & carrier);
+  void recv_UploadText(const int32_t seqid);
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

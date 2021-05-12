@@ -6,12 +6,11 @@ metadata:
   labels:
     death-star-project: social-network
     app-name: jaeger
-
+  namespace: social-network
 spec:
   type: NodePort
   ports:
-  - port: 9081
-    targetPort: 16686
+  - port: 16686
   selector:
     death-star-project: social-network
     app-name: jaeger
@@ -23,7 +22,7 @@ metadata:
   labels:
     death-star-project: social-network
     app-name: jaeger
-
+  namespace: social-network
 spec:
   ports:
   - port: 5775
@@ -52,7 +51,7 @@ metadata:
   labels:
     death-star-project: social-network
     app-name: jaeger
-
+  namespace: social-network
 spec:
   replicas: 1
   selector:

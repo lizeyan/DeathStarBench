@@ -19,7 +19,7 @@ all_structs = []
 
 
 class Iface(object):
-    def ComposeText(self, req_id, text, carrier):
+    def UploadText(self, req_id, text, carrier):
         """
         Parameters:
          - req_id
@@ -37,7 +37,7 @@ class Client(Iface):
             self._oprot = oprot
         self._seqid = 0
 
-    def ComposeText(self, req_id, text, carrier):
+    def UploadText(self, req_id, text, carrier):
         """
         Parameters:
          - req_id
@@ -45,12 +45,12 @@ class Client(Iface):
          - carrier
 
         """
-        self.send_ComposeText(req_id, text, carrier)
-        return self.recv_ComposeText()
+        self.send_UploadText(req_id, text, carrier)
+        self.recv_UploadText()
 
-    def send_ComposeText(self, req_id, text, carrier):
-        self._oprot.writeMessageBegin('ComposeText', TMessageType.CALL, self._seqid)
-        args = ComposeText_args()
+    def send_UploadText(self, req_id, text, carrier):
+        self._oprot.writeMessageBegin('UploadText', TMessageType.CALL, self._seqid)
+        args = UploadText_args()
         args.req_id = req_id
         args.text = text
         args.carrier = carrier
@@ -58,7 +58,7 @@ class Client(Iface):
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
 
-    def recv_ComposeText(self):
+    def recv_UploadText(self):
         iprot = self._iprot
         (fname, mtype, rseqid) = iprot.readMessageBegin()
         if mtype == TMessageType.EXCEPTION:
@@ -66,21 +66,19 @@ class Client(Iface):
             x.read(iprot)
             iprot.readMessageEnd()
             raise x
-        result = ComposeText_result()
+        result = UploadText_result()
         result.read(iprot)
         iprot.readMessageEnd()
-        if result.success is not None:
-            return result.success
         if result.se is not None:
             raise result.se
-        raise TApplicationException(TApplicationException.MISSING_RESULT, "ComposeText failed: unknown result")
+        return
 
 
 class Processor(Iface, TProcessor):
     def __init__(self, handler):
         self._handler = handler
         self._processMap = {}
-        self._processMap["ComposeText"] = Processor.process_ComposeText
+        self._processMap["UploadText"] = Processor.process_UploadText
 
     def process(self, iprot, oprot):
         (name, type, seqid) = iprot.readMessageBegin()
@@ -97,13 +95,13 @@ class Processor(Iface, TProcessor):
             self._processMap[name](self, seqid, iprot, oprot)
         return True
 
-    def process_ComposeText(self, seqid, iprot, oprot):
-        args = ComposeText_args()
+    def process_UploadText(self, seqid, iprot, oprot):
+        args = UploadText_args()
         args.read(iprot)
         iprot.readMessageEnd()
-        result = ComposeText_result()
+        result = UploadText_result()
         try:
-            result.success = self._handler.ComposeText(args.req_id, args.text, args.carrier)
+            self._handler.UploadText(args.req_id, args.text, args.carrier)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -118,7 +116,7 @@ class Processor(Iface, TProcessor):
             logging.exception('Unexpected exception in handler')
             msg_type = TMessageType.EXCEPTION
             result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
-        oprot.writeMessageBegin("ComposeText", msg_type, seqid)
+        oprot.writeMessageBegin("UploadText", msg_type, seqid)
         result.write(oprot)
         oprot.writeMessageEnd()
         oprot.trans.flush()
@@ -126,7 +124,7 @@ class Processor(Iface, TProcessor):
 # HELPER FUNCTIONS AND STRUCTURES
 
 
-class ComposeText_args(object):
+class UploadText_args(object):
     """
     Attributes:
      - req_id
@@ -180,7 +178,7 @@ class ComposeText_args(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('ComposeText_args')
+        oprot.writeStructBegin('UploadText_args')
         if self.req_id is not None:
             oprot.writeFieldBegin('req_id', TType.I64, 1)
             oprot.writeI64(self.req_id)
@@ -213,8 +211,8 @@ class ComposeText_args(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(ComposeText_args)
-ComposeText_args.thrift_spec = (
+all_structs.append(UploadText_args)
+UploadText_args.thrift_spec = (
     None,  # 0
     (1, TType.I64, 'req_id', None, None, ),  # 1
     (2, TType.STRING, 'text', 'UTF8', None, ),  # 2
@@ -222,17 +220,15 @@ ComposeText_args.thrift_spec = (
 )
 
 
-class ComposeText_result(object):
+class UploadText_result(object):
     """
     Attributes:
-     - success
      - se
 
     """
 
 
-    def __init__(self, success=None, se=None,):
-        self.success = success
+    def __init__(self, se=None,):
         self.se = se
 
     def read(self, iprot):
@@ -244,12 +240,7 @@ class ComposeText_result(object):
             (fname, ftype, fid) = iprot.readFieldBegin()
             if ftype == TType.STOP:
                 break
-            if fid == 0:
-                if ftype == TType.STRING:
-                    self.success = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
-                else:
-                    iprot.skip(ftype)
-            elif fid == 1:
+            if fid == 1:
                 if ftype == TType.STRUCT:
                     self.se = ServiceException()
                     self.se.read(iprot)
@@ -264,11 +255,7 @@ class ComposeText_result(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('ComposeText_result')
-        if self.success is not None:
-            oprot.writeFieldBegin('success', TType.STRING, 0)
-            oprot.writeString(self.success.encode('utf-8') if sys.version_info[0] == 2 else self.success)
-            oprot.writeFieldEnd()
+        oprot.writeStructBegin('UploadText_result')
         if self.se is not None:
             oprot.writeFieldBegin('se', TType.STRUCT, 1)
             self.se.write(oprot)
@@ -289,9 +276,9 @@ class ComposeText_result(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(ComposeText_result)
-ComposeText_result.thrift_spec = (
-    (0, TType.STRING, 'success', 'UTF8', None, ),  # 0
+all_structs.append(UploadText_result)
+UploadText_result.thrift_spec = (
+    None,  # 0
     (1, TType.STRUCT, 'se', [ServiceException, None], None, ),  # 1
 )
 fix_spec(all_structs)

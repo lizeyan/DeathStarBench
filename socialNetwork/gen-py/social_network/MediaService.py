@@ -19,7 +19,7 @@ all_structs = []
 
 
 class Iface(object):
-    def ComposeMedia(self, req_id, media_types, media_ids, carrier):
+    def UploadMedia(self, req_id, media_types, media_ids, carrier):
         """
         Parameters:
          - req_id
@@ -38,7 +38,7 @@ class Client(Iface):
             self._oprot = oprot
         self._seqid = 0
 
-    def ComposeMedia(self, req_id, media_types, media_ids, carrier):
+    def UploadMedia(self, req_id, media_types, media_ids, carrier):
         """
         Parameters:
          - req_id
@@ -47,12 +47,12 @@ class Client(Iface):
          - carrier
 
         """
-        self.send_ComposeMedia(req_id, media_types, media_ids, carrier)
-        return self.recv_ComposeMedia()
+        self.send_UploadMedia(req_id, media_types, media_ids, carrier)
+        self.recv_UploadMedia()
 
-    def send_ComposeMedia(self, req_id, media_types, media_ids, carrier):
-        self._oprot.writeMessageBegin('ComposeMedia', TMessageType.CALL, self._seqid)
-        args = ComposeMedia_args()
+    def send_UploadMedia(self, req_id, media_types, media_ids, carrier):
+        self._oprot.writeMessageBegin('UploadMedia', TMessageType.CALL, self._seqid)
+        args = UploadMedia_args()
         args.req_id = req_id
         args.media_types = media_types
         args.media_ids = media_ids
@@ -61,7 +61,7 @@ class Client(Iface):
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
 
-    def recv_ComposeMedia(self):
+    def recv_UploadMedia(self):
         iprot = self._iprot
         (fname, mtype, rseqid) = iprot.readMessageBegin()
         if mtype == TMessageType.EXCEPTION:
@@ -69,21 +69,19 @@ class Client(Iface):
             x.read(iprot)
             iprot.readMessageEnd()
             raise x
-        result = ComposeMedia_result()
+        result = UploadMedia_result()
         result.read(iprot)
         iprot.readMessageEnd()
-        if result.success is not None:
-            return result.success
         if result.se is not None:
             raise result.se
-        raise TApplicationException(TApplicationException.MISSING_RESULT, "ComposeMedia failed: unknown result")
+        return
 
 
 class Processor(Iface, TProcessor):
     def __init__(self, handler):
         self._handler = handler
         self._processMap = {}
-        self._processMap["ComposeMedia"] = Processor.process_ComposeMedia
+        self._processMap["UploadMedia"] = Processor.process_UploadMedia
 
     def process(self, iprot, oprot):
         (name, type, seqid) = iprot.readMessageBegin()
@@ -100,13 +98,13 @@ class Processor(Iface, TProcessor):
             self._processMap[name](self, seqid, iprot, oprot)
         return True
 
-    def process_ComposeMedia(self, seqid, iprot, oprot):
-        args = ComposeMedia_args()
+    def process_UploadMedia(self, seqid, iprot, oprot):
+        args = UploadMedia_args()
         args.read(iprot)
         iprot.readMessageEnd()
-        result = ComposeMedia_result()
+        result = UploadMedia_result()
         try:
-            result.success = self._handler.ComposeMedia(args.req_id, args.media_types, args.media_ids, args.carrier)
+            self._handler.UploadMedia(args.req_id, args.media_types, args.media_ids, args.carrier)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -121,7 +119,7 @@ class Processor(Iface, TProcessor):
             logging.exception('Unexpected exception in handler')
             msg_type = TMessageType.EXCEPTION
             result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
-        oprot.writeMessageBegin("ComposeMedia", msg_type, seqid)
+        oprot.writeMessageBegin("UploadMedia", msg_type, seqid)
         result.write(oprot)
         oprot.writeMessageEnd()
         oprot.trans.flush()
@@ -129,7 +127,7 @@ class Processor(Iface, TProcessor):
 # HELPER FUNCTIONS AND STRUCTURES
 
 
-class ComposeMedia_args(object):
+class UploadMedia_args(object):
     """
     Attributes:
      - req_id
@@ -163,31 +161,31 @@ class ComposeMedia_args(object):
             elif fid == 2:
                 if ftype == TType.LIST:
                     self.media_types = []
-                    (_etype338, _size335) = iprot.readListBegin()
-                    for _i339 in range(_size335):
-                        _elem340 = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
-                        self.media_types.append(_elem340)
+                    (_etype392, _size389) = iprot.readListBegin()
+                    for _i393 in range(_size389):
+                        _elem394 = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                        self.media_types.append(_elem394)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
             elif fid == 3:
                 if ftype == TType.LIST:
                     self.media_ids = []
-                    (_etype344, _size341) = iprot.readListBegin()
-                    for _i345 in range(_size341):
-                        _elem346 = iprot.readI64()
-                        self.media_ids.append(_elem346)
+                    (_etype398, _size395) = iprot.readListBegin()
+                    for _i399 in range(_size395):
+                        _elem400 = iprot.readI64()
+                        self.media_ids.append(_elem400)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
             elif fid == 4:
                 if ftype == TType.MAP:
                     self.carrier = {}
-                    (_ktype348, _vtype349, _size347) = iprot.readMapBegin()
-                    for _i351 in range(_size347):
-                        _key352 = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
-                        _val353 = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
-                        self.carrier[_key352] = _val353
+                    (_ktype402, _vtype403, _size401) = iprot.readMapBegin()
+                    for _i405 in range(_size401):
+                        _key406 = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                        _val407 = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                        self.carrier[_key406] = _val407
                     iprot.readMapEnd()
                 else:
                     iprot.skip(ftype)
@@ -200,7 +198,7 @@ class ComposeMedia_args(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('ComposeMedia_args')
+        oprot.writeStructBegin('UploadMedia_args')
         if self.req_id is not None:
             oprot.writeFieldBegin('req_id', TType.I64, 1)
             oprot.writeI64(self.req_id)
@@ -208,23 +206,23 @@ class ComposeMedia_args(object):
         if self.media_types is not None:
             oprot.writeFieldBegin('media_types', TType.LIST, 2)
             oprot.writeListBegin(TType.STRING, len(self.media_types))
-            for iter354 in self.media_types:
-                oprot.writeString(iter354.encode('utf-8') if sys.version_info[0] == 2 else iter354)
+            for iter408 in self.media_types:
+                oprot.writeString(iter408.encode('utf-8') if sys.version_info[0] == 2 else iter408)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         if self.media_ids is not None:
             oprot.writeFieldBegin('media_ids', TType.LIST, 3)
             oprot.writeListBegin(TType.I64, len(self.media_ids))
-            for iter355 in self.media_ids:
-                oprot.writeI64(iter355)
+            for iter409 in self.media_ids:
+                oprot.writeI64(iter409)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         if self.carrier is not None:
             oprot.writeFieldBegin('carrier', TType.MAP, 4)
             oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.carrier))
-            for kiter356, viter357 in self.carrier.items():
-                oprot.writeString(kiter356.encode('utf-8') if sys.version_info[0] == 2 else kiter356)
-                oprot.writeString(viter357.encode('utf-8') if sys.version_info[0] == 2 else viter357)
+            for kiter410, viter411 in self.carrier.items():
+                oprot.writeString(kiter410.encode('utf-8') if sys.version_info[0] == 2 else kiter410)
+                oprot.writeString(viter411.encode('utf-8') if sys.version_info[0] == 2 else viter411)
             oprot.writeMapEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -243,8 +241,8 @@ class ComposeMedia_args(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(ComposeMedia_args)
-ComposeMedia_args.thrift_spec = (
+all_structs.append(UploadMedia_args)
+UploadMedia_args.thrift_spec = (
     None,  # 0
     (1, TType.I64, 'req_id', None, None, ),  # 1
     (2, TType.LIST, 'media_types', (TType.STRING, 'UTF8', False), None, ),  # 2
@@ -253,17 +251,15 @@ ComposeMedia_args.thrift_spec = (
 )
 
 
-class ComposeMedia_result(object):
+class UploadMedia_result(object):
     """
     Attributes:
-     - success
      - se
 
     """
 
 
-    def __init__(self, success=None, se=None,):
-        self.success = success
+    def __init__(self, se=None,):
         self.se = se
 
     def read(self, iprot):
@@ -275,13 +271,7 @@ class ComposeMedia_result(object):
             (fname, ftype, fid) = iprot.readFieldBegin()
             if ftype == TType.STOP:
                 break
-            if fid == 0:
-                if ftype == TType.STRUCT:
-                    self.success = Media()
-                    self.success.read(iprot)
-                else:
-                    iprot.skip(ftype)
-            elif fid == 1:
+            if fid == 1:
                 if ftype == TType.STRUCT:
                     self.se = ServiceException()
                     self.se.read(iprot)
@@ -296,11 +286,7 @@ class ComposeMedia_result(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('ComposeMedia_result')
-        if self.success is not None:
-            oprot.writeFieldBegin('success', TType.STRUCT, 0)
-            self.success.write(oprot)
-            oprot.writeFieldEnd()
+        oprot.writeStructBegin('UploadMedia_result')
         if self.se is not None:
             oprot.writeFieldBegin('se', TType.STRUCT, 1)
             self.se.write(oprot)
@@ -321,9 +307,9 @@ class ComposeMedia_result(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(ComposeMedia_result)
-ComposeMedia_result.thrift_spec = (
-    (0, TType.STRUCT, 'success', [Media, None], None, ),  # 0
+all_structs.append(UploadMedia_result)
+UploadMedia_result.thrift_spec = (
+    None,  # 0
     (1, TType.STRUCT, 'se', [ServiceException, None], None, ),  # 1
 )
 fix_spec(all_structs)

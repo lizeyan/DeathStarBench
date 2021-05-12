@@ -6,11 +6,11 @@ metadata:
   labels:
     death-star-project: social-network
     app-name: nginx-thrift
-
+  namespace: social-network
 spec:
   type: NodePort
   ports:
-  - port: 9080
+  - port: 8080
     targetPort: 8080
   selector:
     death-star-project: social-network
@@ -23,7 +23,7 @@ metadata:
   labels:
     death-star-project: social-network
     app-name: nginx-thrift
-
+  namespace: social-network
 spec:
   replicas: 1
   selector:
@@ -37,7 +37,6 @@ spec:
         app-name: nginx-thrift
       name: nginx-thrift
     spec:
-      nodeName: dsb1.cluster.peidan.me
       containers:
       - name: nginx-thrift
         image: yg397/openresty-thrift:xenial
@@ -58,21 +57,21 @@ spec:
       volumes:
       - name: lua-scripts
         hostPath: 
-          path: /root/DeathStarBench/socialNetwork/nginx-web-server/lua-scripts-k8s
+          path: /mnt/mfs/DeathStarBench/socialNetwork/nginx-web-server/lua-scripts-k8s
           type: Directory
       - name: pages
         hostPath: 
-          path: /root/DeathStarBench/socialNetwork/nginx-web-server/pages
+          path: /mnt/mfs/DeathStarBench/socialNetwork/nginx-web-server/pages
           type: Directory
       - name: nginx-conf
         hostPath: 
-          path: /root/DeathStarBench/socialNetwork/nginx-web-server/conf/nginx-k8s.conf
+          path: /mnt/mfs/DeathStarBench/socialNetwork/nginx-web-server/conf/nginx-k8s.conf
           type: File
       - name: jaeger-config-json
         hostPath: 
-          path: /root/DeathStarBench/socialNetwork/nginx-web-server/jaeger-config.json
+          path: /mnt/mfs/DeathStarBench/socialNetwork/nginx-web-server/jaeger-config.json
           type: File
       - name: gen-lua
         hostPath: 
-          path: /root/DeathStarBench/socialNetwork/gen-lua
+          path: /mnt/mfs/DeathStarBench/socialNetwork/gen-lua
           type: Directory

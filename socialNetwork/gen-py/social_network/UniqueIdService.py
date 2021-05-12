@@ -19,7 +19,7 @@ all_structs = []
 
 
 class Iface(object):
-    def ComposeUniqueId(self, req_id, post_type, carrier):
+    def UploadUniqueId(self, req_id, post_type, carrier):
         """
         Parameters:
          - req_id
@@ -37,7 +37,7 @@ class Client(Iface):
             self._oprot = oprot
         self._seqid = 0
 
-    def ComposeUniqueId(self, req_id, post_type, carrier):
+    def UploadUniqueId(self, req_id, post_type, carrier):
         """
         Parameters:
          - req_id
@@ -45,12 +45,12 @@ class Client(Iface):
          - carrier
 
         """
-        self.send_ComposeUniqueId(req_id, post_type, carrier)
-        return self.recv_ComposeUniqueId()
+        self.send_UploadUniqueId(req_id, post_type, carrier)
+        self.recv_UploadUniqueId()
 
-    def send_ComposeUniqueId(self, req_id, post_type, carrier):
-        self._oprot.writeMessageBegin('ComposeUniqueId', TMessageType.CALL, self._seqid)
-        args = ComposeUniqueId_args()
+    def send_UploadUniqueId(self, req_id, post_type, carrier):
+        self._oprot.writeMessageBegin('UploadUniqueId', TMessageType.CALL, self._seqid)
+        args = UploadUniqueId_args()
         args.req_id = req_id
         args.post_type = post_type
         args.carrier = carrier
@@ -58,7 +58,7 @@ class Client(Iface):
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
 
-    def recv_ComposeUniqueId(self):
+    def recv_UploadUniqueId(self):
         iprot = self._iprot
         (fname, mtype, rseqid) = iprot.readMessageBegin()
         if mtype == TMessageType.EXCEPTION:
@@ -66,21 +66,19 @@ class Client(Iface):
             x.read(iprot)
             iprot.readMessageEnd()
             raise x
-        result = ComposeUniqueId_result()
+        result = UploadUniqueId_result()
         result.read(iprot)
         iprot.readMessageEnd()
-        if result.success is not None:
-            return result.success
         if result.se is not None:
             raise result.se
-        raise TApplicationException(TApplicationException.MISSING_RESULT, "ComposeUniqueId failed: unknown result")
+        return
 
 
 class Processor(Iface, TProcessor):
     def __init__(self, handler):
         self._handler = handler
         self._processMap = {}
-        self._processMap["ComposeUniqueId"] = Processor.process_ComposeUniqueId
+        self._processMap["UploadUniqueId"] = Processor.process_UploadUniqueId
 
     def process(self, iprot, oprot):
         (name, type, seqid) = iprot.readMessageBegin()
@@ -97,13 +95,13 @@ class Processor(Iface, TProcessor):
             self._processMap[name](self, seqid, iprot, oprot)
         return True
 
-    def process_ComposeUniqueId(self, seqid, iprot, oprot):
-        args = ComposeUniqueId_args()
+    def process_UploadUniqueId(self, seqid, iprot, oprot):
+        args = UploadUniqueId_args()
         args.read(iprot)
         iprot.readMessageEnd()
-        result = ComposeUniqueId_result()
+        result = UploadUniqueId_result()
         try:
-            result.success = self._handler.ComposeUniqueId(args.req_id, args.post_type, args.carrier)
+            self._handler.UploadUniqueId(args.req_id, args.post_type, args.carrier)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -118,7 +116,7 @@ class Processor(Iface, TProcessor):
             logging.exception('Unexpected exception in handler')
             msg_type = TMessageType.EXCEPTION
             result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
-        oprot.writeMessageBegin("ComposeUniqueId", msg_type, seqid)
+        oprot.writeMessageBegin("UploadUniqueId", msg_type, seqid)
         result.write(oprot)
         oprot.writeMessageEnd()
         oprot.trans.flush()
@@ -126,7 +124,7 @@ class Processor(Iface, TProcessor):
 # HELPER FUNCTIONS AND STRUCTURES
 
 
-class ComposeUniqueId_args(object):
+class UploadUniqueId_args(object):
     """
     Attributes:
      - req_id
@@ -180,7 +178,7 @@ class ComposeUniqueId_args(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('ComposeUniqueId_args')
+        oprot.writeStructBegin('UploadUniqueId_args')
         if self.req_id is not None:
             oprot.writeFieldBegin('req_id', TType.I64, 1)
             oprot.writeI64(self.req_id)
@@ -213,8 +211,8 @@ class ComposeUniqueId_args(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(ComposeUniqueId_args)
-ComposeUniqueId_args.thrift_spec = (
+all_structs.append(UploadUniqueId_args)
+UploadUniqueId_args.thrift_spec = (
     None,  # 0
     (1, TType.I64, 'req_id', None, None, ),  # 1
     (2, TType.I32, 'post_type', None, None, ),  # 2
@@ -222,17 +220,15 @@ ComposeUniqueId_args.thrift_spec = (
 )
 
 
-class ComposeUniqueId_result(object):
+class UploadUniqueId_result(object):
     """
     Attributes:
-     - success
      - se
 
     """
 
 
-    def __init__(self, success=None, se=None,):
-        self.success = success
+    def __init__(self, se=None,):
         self.se = se
 
     def read(self, iprot):
@@ -244,12 +240,7 @@ class ComposeUniqueId_result(object):
             (fname, ftype, fid) = iprot.readFieldBegin()
             if ftype == TType.STOP:
                 break
-            if fid == 0:
-                if ftype == TType.I64:
-                    self.success = iprot.readI64()
-                else:
-                    iprot.skip(ftype)
-            elif fid == 1:
+            if fid == 1:
                 if ftype == TType.STRUCT:
                     self.se = ServiceException()
                     self.se.read(iprot)
@@ -264,11 +255,7 @@ class ComposeUniqueId_result(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('ComposeUniqueId_result')
-        if self.success is not None:
-            oprot.writeFieldBegin('success', TType.I64, 0)
-            oprot.writeI64(self.success)
-            oprot.writeFieldEnd()
+        oprot.writeStructBegin('UploadUniqueId_result')
         if self.se is not None:
             oprot.writeFieldBegin('se', TType.STRUCT, 1)
             self.se.write(oprot)
@@ -289,9 +276,9 @@ class ComposeUniqueId_result(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(ComposeUniqueId_result)
-ComposeUniqueId_result.thrift_spec = (
-    (0, TType.I64, 'success', None, None, ),  # 0
+all_structs.append(UploadUniqueId_result)
+UploadUniqueId_result.thrift_spec = (
+    None,  # 0
     (1, TType.STRUCT, 'se', [ServiceException, None], None, ),  # 1
 )
 fix_spec(all_structs)

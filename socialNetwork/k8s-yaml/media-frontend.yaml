@@ -6,11 +6,11 @@ metadata:
   labels:
     death-star-project: social-network
     app-name: media-frontend
-
+  namespace: social-network
 spec:
   type: NodePort
   ports:
-  - port: 9082
+  - port: 8080
     targetPort: 8080
   selector:
     death-star-project: social-network
@@ -23,7 +23,7 @@ metadata:
   labels:
     death-star-project: social-network
     app-name: media-frontend
-
+  namespace: social-network
 spec:
   replicas: 1
   selector:
@@ -37,7 +37,6 @@ spec:
         app-name: media-frontend
       name: media-frontend
     spec:
-      nodeName: dsb1.cluster.peidan.me
       containers:
       - name: media-frontend
         image: yg397/media-frontend:xenial
@@ -52,9 +51,9 @@ spec:
       volumes:
       - name: lua-scripts
         hostPath: 
-          path: /root/DeathStarBench/socialNetwork/media-frontend/lua-scripts-k8s
+          path: /mnt/mfs/DeathStarBench/socialNetwork/media-frontend/lua-scripts-k8s
           type: Directory
       - name: nginx-conf
         hostPath: 
-          path: /root/DeathStarBench/socialNetwork/media-frontend/conf/nginx-k8s.conf
+          path: /mnt/mfs/DeathStarBench/socialNetwork/media-frontend/conf/nginx-k8s.conf
           type: File

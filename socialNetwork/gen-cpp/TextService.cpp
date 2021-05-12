@@ -9,11 +9,11 @@
 namespace social_network {
 
 
-TextService_ComposeText_args::~TextService_ComposeText_args() throw() {
+TextService_UploadText_args::~TextService_UploadText_args() throw() {
 }
 
 
-uint32_t TextService_ComposeText_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t TextService_UploadText_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -54,17 +54,17 @@ uint32_t TextService_ComposeText_args::read(::apache::thrift::protocol::TProtoco
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->carrier.clear();
-            uint32_t _size58;
-            ::apache::thrift::protocol::TType _ktype59;
-            ::apache::thrift::protocol::TType _vtype60;
-            xfer += iprot->readMapBegin(_ktype59, _vtype60, _size58);
-            uint32_t _i62;
-            for (_i62 = 0; _i62 < _size58; ++_i62)
+            uint32_t _size44;
+            ::apache::thrift::protocol::TType _ktype45;
+            ::apache::thrift::protocol::TType _vtype46;
+            xfer += iprot->readMapBegin(_ktype45, _vtype46, _size44);
+            uint32_t _i48;
+            for (_i48 = 0; _i48 < _size44; ++_i48)
             {
-              std::string _key63;
-              xfer += iprot->readString(_key63);
-              std::string& _val64 = this->carrier[_key63];
-              xfer += iprot->readString(_val64);
+              std::string _key49;
+              xfer += iprot->readString(_key49);
+              std::string& _val50 = this->carrier[_key49];
+              xfer += iprot->readString(_val50);
             }
             xfer += iprot->readMapEnd();
           }
@@ -85,10 +85,10 @@ uint32_t TextService_ComposeText_args::read(::apache::thrift::protocol::TProtoco
   return xfer;
 }
 
-uint32_t TextService_ComposeText_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t TextService_UploadText_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("TextService_ComposeText_args");
+  xfer += oprot->writeStructBegin("TextService_UploadText_args");
 
   xfer += oprot->writeFieldBegin("req_id", ::apache::thrift::protocol::T_I64, 1);
   xfer += oprot->writeI64(this->req_id);
@@ -101,11 +101,11 @@ uint32_t TextService_ComposeText_args::write(::apache::thrift::protocol::TProtoc
   xfer += oprot->writeFieldBegin("carrier", ::apache::thrift::protocol::T_MAP, 3);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->carrier.size()));
-    std::map<std::string, std::string> ::const_iterator _iter65;
-    for (_iter65 = this->carrier.begin(); _iter65 != this->carrier.end(); ++_iter65)
+    std::map<std::string, std::string> ::const_iterator _iter51;
+    for (_iter51 = this->carrier.begin(); _iter51 != this->carrier.end(); ++_iter51)
     {
-      xfer += oprot->writeString(_iter65->first);
-      xfer += oprot->writeString(_iter65->second);
+      xfer += oprot->writeString(_iter51->first);
+      xfer += oprot->writeString(_iter51->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -117,14 +117,14 @@ uint32_t TextService_ComposeText_args::write(::apache::thrift::protocol::TProtoc
 }
 
 
-TextService_ComposeText_pargs::~TextService_ComposeText_pargs() throw() {
+TextService_UploadText_pargs::~TextService_UploadText_pargs() throw() {
 }
 
 
-uint32_t TextService_ComposeText_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t TextService_UploadText_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("TextService_ComposeText_pargs");
+  xfer += oprot->writeStructBegin("TextService_UploadText_pargs");
 
   xfer += oprot->writeFieldBegin("req_id", ::apache::thrift::protocol::T_I64, 1);
   xfer += oprot->writeI64((*(this->req_id)));
@@ -137,11 +137,11 @@ uint32_t TextService_ComposeText_pargs::write(::apache::thrift::protocol::TProto
   xfer += oprot->writeFieldBegin("carrier", ::apache::thrift::protocol::T_MAP, 3);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->carrier)).size()));
-    std::map<std::string, std::string> ::const_iterator _iter66;
-    for (_iter66 = (*(this->carrier)).begin(); _iter66 != (*(this->carrier)).end(); ++_iter66)
+    std::map<std::string, std::string> ::const_iterator _iter52;
+    for (_iter52 = (*(this->carrier)).begin(); _iter52 != (*(this->carrier)).end(); ++_iter52)
     {
-      xfer += oprot->writeString(_iter66->first);
-      xfer += oprot->writeString(_iter66->second);
+      xfer += oprot->writeString(_iter52->first);
+      xfer += oprot->writeString(_iter52->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -153,11 +153,11 @@ uint32_t TextService_ComposeText_pargs::write(::apache::thrift::protocol::TProto
 }
 
 
-TextService_ComposeText_result::~TextService_ComposeText_result() throw() {
+TextService_UploadText_result::~TextService_UploadText_result() throw() {
 }
 
 
-uint32_t TextService_ComposeText_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t TextService_UploadText_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -178,14 +178,6 @@ uint32_t TextService_ComposeText_result::read(::apache::thrift::protocol::TProto
     }
     switch (fid)
     {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->success.read(iprot);
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRUCT) {
           xfer += this->se.read(iprot);
@@ -206,17 +198,13 @@ uint32_t TextService_ComposeText_result::read(::apache::thrift::protocol::TProto
   return xfer;
 }
 
-uint32_t TextService_ComposeText_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t TextService_UploadText_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("TextService_ComposeText_result");
+  xfer += oprot->writeStructBegin("TextService_UploadText_result");
 
-  if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
-    xfer += this->success.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  } else if (this->__isset.se) {
+  if (this->__isset.se) {
     xfer += oprot->writeFieldBegin("se", ::apache::thrift::protocol::T_STRUCT, 1);
     xfer += this->se.write(oprot);
     xfer += oprot->writeFieldEnd();
@@ -227,11 +215,11 @@ uint32_t TextService_ComposeText_result::write(::apache::thrift::protocol::TProt
 }
 
 
-TextService_ComposeText_presult::~TextService_ComposeText_presult() throw() {
+TextService_UploadText_presult::~TextService_UploadText_presult() throw() {
 }
 
 
-uint32_t TextService_ComposeText_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t TextService_UploadText_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -252,14 +240,6 @@ uint32_t TextService_ComposeText_presult::read(::apache::thrift::protocol::TProt
     }
     switch (fid)
     {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += (*(this->success)).read(iprot);
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRUCT) {
           xfer += this->se.read(iprot);
@@ -280,18 +260,18 @@ uint32_t TextService_ComposeText_presult::read(::apache::thrift::protocol::TProt
   return xfer;
 }
 
-void TextServiceClient::ComposeText(TextServiceReturn& _return, const int64_t req_id, const std::string& text, const std::map<std::string, std::string> & carrier)
+void TextServiceClient::UploadText(const int64_t req_id, const std::string& text, const std::map<std::string, std::string> & carrier)
 {
-  send_ComposeText(req_id, text, carrier);
-  recv_ComposeText(_return);
+  send_UploadText(req_id, text, carrier);
+  recv_UploadText();
 }
 
-void TextServiceClient::send_ComposeText(const int64_t req_id, const std::string& text, const std::map<std::string, std::string> & carrier)
+void TextServiceClient::send_UploadText(const int64_t req_id, const std::string& text, const std::map<std::string, std::string> & carrier)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("ComposeText", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("UploadText", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  TextService_ComposeText_pargs args;
+  TextService_UploadText_pargs args;
   args.req_id = &req_id;
   args.text = &text;
   args.carrier = &carrier;
@@ -302,7 +282,7 @@ void TextServiceClient::send_ComposeText(const int64_t req_id, const std::string
   oprot_->getTransport()->flush();
 }
 
-void TextServiceClient::recv_ComposeText(TextServiceReturn& _return)
+void TextServiceClient::recv_UploadText()
 {
 
   int32_t rseqid = 0;
@@ -322,25 +302,20 @@ void TextServiceClient::recv_ComposeText(TextServiceReturn& _return)
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("ComposeText") != 0) {
+  if (fname.compare("UploadText") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  TextService_ComposeText_presult result;
-  result.success = &_return;
+  TextService_UploadText_presult result;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
 
-  if (result.__isset.success) {
-    // _return pointer has now been filled
-    return;
-  }
   if (result.__isset.se) {
     throw result.se;
   }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "ComposeText failed: unknown result");
+  return;
 }
 
 bool TextServiceProcessor::dispatchCall(::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, const std::string& fname, int32_t seqid, void* callContext) {
@@ -362,41 +337,40 @@ bool TextServiceProcessor::dispatchCall(::apache::thrift::protocol::TProtocol* i
   return true;
 }
 
-void TextServiceProcessor::process_ComposeText(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void TextServiceProcessor::process_UploadText(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("TextService.ComposeText", callContext);
+    ctx = this->eventHandler_->getContext("TextService.UploadText", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "TextService.ComposeText");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "TextService.UploadText");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "TextService.ComposeText");
+    this->eventHandler_->preRead(ctx, "TextService.UploadText");
   }
 
-  TextService_ComposeText_args args;
+  TextService_UploadText_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "TextService.ComposeText", bytes);
+    this->eventHandler_->postRead(ctx, "TextService.UploadText", bytes);
   }
 
-  TextService_ComposeText_result result;
+  TextService_UploadText_result result;
   try {
-    iface_->ComposeText(result.success, args.req_id, args.text, args.carrier);
-    result.__isset.success = true;
+    iface_->UploadText(args.req_id, args.text, args.carrier);
   } catch (ServiceException &se) {
     result.se = se;
     result.__isset.se = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "TextService.ComposeText");
+      this->eventHandler_->handlerError(ctx, "TextService.UploadText");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("ComposeText", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("UploadText", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -405,17 +379,17 @@ void TextServiceProcessor::process_ComposeText(int32_t seqid, ::apache::thrift::
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "TextService.ComposeText");
+    this->eventHandler_->preWrite(ctx, "TextService.UploadText");
   }
 
-  oprot->writeMessageBegin("ComposeText", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("UploadText", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "TextService.ComposeText", bytes);
+    this->eventHandler_->postWrite(ctx, "TextService.UploadText", bytes);
   }
 }
 
@@ -426,19 +400,19 @@ void TextServiceProcessor::process_ComposeText(int32_t seqid, ::apache::thrift::
   return processor;
 }
 
-void TextServiceConcurrentClient::ComposeText(TextServiceReturn& _return, const int64_t req_id, const std::string& text, const std::map<std::string, std::string> & carrier)
+void TextServiceConcurrentClient::UploadText(const int64_t req_id, const std::string& text, const std::map<std::string, std::string> & carrier)
 {
-  int32_t seqid = send_ComposeText(req_id, text, carrier);
-  recv_ComposeText(_return, seqid);
+  int32_t seqid = send_UploadText(req_id, text, carrier);
+  recv_UploadText(seqid);
 }
 
-int32_t TextServiceConcurrentClient::send_ComposeText(const int64_t req_id, const std::string& text, const std::map<std::string, std::string> & carrier)
+int32_t TextServiceConcurrentClient::send_UploadText(const int64_t req_id, const std::string& text, const std::map<std::string, std::string> & carrier)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
-  oprot_->writeMessageBegin("ComposeText", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("UploadText", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  TextService_ComposeText_pargs args;
+  TextService_UploadText_pargs args;
   args.req_id = &req_id;
   args.text = &text;
   args.carrier = &carrier;
@@ -452,7 +426,7 @@ int32_t TextServiceConcurrentClient::send_ComposeText(const int64_t req_id, cons
   return cseqid;
 }
 
-void TextServiceConcurrentClient::recv_ComposeText(TextServiceReturn& _return, const int32_t seqid)
+void TextServiceConcurrentClient::recv_UploadText(const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -481,7 +455,7 @@ void TextServiceConcurrentClient::recv_ComposeText(TextServiceReturn& _return, c
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("ComposeText") != 0) {
+      if (fname.compare("UploadText") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -490,23 +464,17 @@ void TextServiceConcurrentClient::recv_ComposeText(TextServiceReturn& _return, c
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      TextService_ComposeText_presult result;
-      result.success = &_return;
+      TextService_UploadText_presult result;
       result.read(iprot_);
       iprot_->readMessageEnd();
       iprot_->getTransport()->readEnd();
 
-      if (result.__isset.success) {
-        // _return pointer has now been filled
-        sentry.commit();
-        return;
-      }
       if (result.__isset.se) {
         sentry.commit();
         throw result.se;
       }
-      // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "ComposeText failed: unknown result");
+      sentry.commit();
+      return;
     }
     // seqid != rseqid
     this->sync_.updatePending(fname, mtype, rseqid);

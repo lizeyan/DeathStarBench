@@ -6,7 +6,7 @@ metadata:
   labels:
     death-star-project: social-network
     app-name: home-timeline-service
-
+  namespace: social-network
 spec:
   ports:
   - port: 9090
@@ -21,7 +21,7 @@ metadata:
   labels:
     death-star-project: social-network
     app-name: home-timeline-service
-
+  namespace: social-network
 spec:
   replicas: 1
   selector:
@@ -39,4 +39,12 @@ spec:
       - name: home-timeline-service
         image: docker.peidan.me/lizytalk/social-network-microservices
         command: ["HomeTimelineService"]
+        volumeMounts:
+        - mountPath: /social-network-microservices/config/jaeger-config.yml
+          name: jaeger-config-yml
       restartPolicy: Always
+      volumes:
+      - name: jaeger-config-yml
+        hostPath:
+          path: /mnt/mfs/DeathStarBench/socialNetwork/config/jaeger-config.yml
+          type: File

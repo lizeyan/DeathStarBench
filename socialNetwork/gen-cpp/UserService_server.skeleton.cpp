@@ -35,14 +35,14 @@ class UserServiceHandler : virtual public UserServiceIf {
     printf("Login\n");
   }
 
-  void ComposeCreatorWithUserId(Creator& _return, const int64_t req_id, const int64_t user_id, const std::string& username, const std::map<std::string, std::string> & carrier) {
+  void UploadCreatorWithUserId(const int64_t req_id, const int64_t user_id, const std::string& username, const std::map<std::string, std::string> & carrier) {
     // Your implementation goes here
-    printf("ComposeCreatorWithUserId\n");
+    printf("UploadCreatorWithUserId\n");
   }
 
-  void ComposeCreatorWithUsername(Creator& _return, const int64_t req_id, const std::string& username, const std::map<std::string, std::string> & carrier) {
+  void UploadCreatorWithUsername(const int64_t req_id, const std::string& username, const std::map<std::string, std::string> & carrier) {
     // Your implementation goes here
-    printf("ComposeCreatorWithUsername\n");
+    printf("UploadCreatorWithUsername\n");
   }
 
   int64_t GetUserId(const int64_t req_id, const std::string& username, const std::map<std::string, std::string> & carrier) {

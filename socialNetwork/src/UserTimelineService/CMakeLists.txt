@@ -10,8 +10,7 @@ target_include_directories(
     UserTimelineService PRIVATE
     ${MONGOC_INCLUDE_DIRS}
     /usr/local/include/jaegertracing
-    /usr/local/include/hiredis
-    /usr/local/include/sw
+    /usr/local/include/cpp_redis
 )
 
 target_link_libraries(
@@ -24,8 +23,8 @@ target_link_libraries(
     Boost::log
     Boost::log_setup
     jaegertracing
-    /usr/local/lib/libhiredis.a
-    /usr/local/lib/libredis++.a
+    /usr/local/lib/libcpp_redis.a
+    /usr/local/lib/libtacopie.a
 )
 
 install(TARGETS UserTimelineService DESTINATION ./)

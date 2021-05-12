@@ -19,7 +19,7 @@ all_structs = []
 
 
 class Iface(object):
-    def ComposeUserMentions(self, req_id, usernames, carrier):
+    def UploadUserMentions(self, req_id, usernames, carrier):
         """
         Parameters:
          - req_id
@@ -37,7 +37,7 @@ class Client(Iface):
             self._oprot = oprot
         self._seqid = 0
 
-    def ComposeUserMentions(self, req_id, usernames, carrier):
+    def UploadUserMentions(self, req_id, usernames, carrier):
         """
         Parameters:
          - req_id
@@ -45,12 +45,12 @@ class Client(Iface):
          - carrier
 
         """
-        self.send_ComposeUserMentions(req_id, usernames, carrier)
-        return self.recv_ComposeUserMentions()
+        self.send_UploadUserMentions(req_id, usernames, carrier)
+        self.recv_UploadUserMentions()
 
-    def send_ComposeUserMentions(self, req_id, usernames, carrier):
-        self._oprot.writeMessageBegin('ComposeUserMentions', TMessageType.CALL, self._seqid)
-        args = ComposeUserMentions_args()
+    def send_UploadUserMentions(self, req_id, usernames, carrier):
+        self._oprot.writeMessageBegin('UploadUserMentions', TMessageType.CALL, self._seqid)
+        args = UploadUserMentions_args()
         args.req_id = req_id
         args.usernames = usernames
         args.carrier = carrier
@@ -58,7 +58,7 @@ class Client(Iface):
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
 
-    def recv_ComposeUserMentions(self):
+    def recv_UploadUserMentions(self):
         iprot = self._iprot
         (fname, mtype, rseqid) = iprot.readMessageBegin()
         if mtype == TMessageType.EXCEPTION:
@@ -66,21 +66,19 @@ class Client(Iface):
             x.read(iprot)
             iprot.readMessageEnd()
             raise x
-        result = ComposeUserMentions_result()
+        result = UploadUserMentions_result()
         result.read(iprot)
         iprot.readMessageEnd()
-        if result.success is not None:
-            return result.success
         if result.se is not None:
             raise result.se
-        raise TApplicationException(TApplicationException.MISSING_RESULT, "ComposeUserMentions failed: unknown result")
+        return
 
 
 class Processor(Iface, TProcessor):
     def __init__(self, handler):
         self._handler = handler
         self._processMap = {}
-        self._processMap["ComposeUserMentions"] = Processor.process_ComposeUserMentions
+        self._processMap["UploadUserMentions"] = Processor.process_UploadUserMentions
 
     def process(self, iprot, oprot):
         (name, type, seqid) = iprot.readMessageBegin()
@@ -97,13 +95,13 @@ class Processor(Iface, TProcessor):
             self._processMap[name](self, seqid, iprot, oprot)
         return True
 
-    def process_ComposeUserMentions(self, seqid, iprot, oprot):
-        args = ComposeUserMentions_args()
+    def process_UploadUserMentions(self, seqid, iprot, oprot):
+        args = UploadUserMentions_args()
         args.read(iprot)
         iprot.readMessageEnd()
-        result = ComposeUserMentions_result()
+        result = UploadUserMentions_result()
         try:
-            result.success = self._handler.ComposeUserMentions(args.req_id, args.usernames, args.carrier)
+            self._handler.UploadUserMentions(args.req_id, args.usernames, args.carrier)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -118,7 +116,7 @@ class Processor(Iface, TProcessor):
             logging.exception('Unexpected exception in handler')
             msg_type = TMessageType.EXCEPTION
             result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
-        oprot.writeMessageBegin("ComposeUserMentions", msg_type, seqid)
+        oprot.writeMessageBegin("UploadUserMentions", msg_type, seqid)
         result.write(oprot)
         oprot.writeMessageEnd()
         oprot.trans.flush()
@@ -126,7 +124,7 @@ class Processor(Iface, TProcessor):
 # HELPER FUNCTIONS AND STRUCTURES
 
 
-class ComposeUserMentions_args(object):
+class UploadUserMentions_args(object):
     """
     Attributes:
      - req_id
@@ -158,21 +156,21 @@ class ComposeUserMentions_args(object):
             elif fid == 2:
                 if ftype == TType.LIST:
                     self.usernames = []
-                    (_etype269, _size266) = iprot.readListBegin()
-                    for _i270 in range(_size266):
-                        _elem271 = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
-                        self.usernames.append(_elem271)
+                    (_etype330, _size327) = iprot.readListBegin()
+                    for _i331 in range(_size327):
+                        _elem332 = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                        self.usernames.append(_elem332)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
             elif fid == 3:
                 if ftype == TType.MAP:
                     self.carrier = {}
-                    (_ktype273, _vtype274, _size272) = iprot.readMapBegin()
-                    for _i276 in range(_size272):
-                        _key277 = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
-                        _val278 = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
-                        self.carrier[_key277] = _val278
+                    (_ktype334, _vtype335, _size333) = iprot.readMapBegin()
+                    for _i337 in range(_size333):
+                        _key338 = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                        _val339 = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                        self.carrier[_key338] = _val339
                     iprot.readMapEnd()
                 else:
                     iprot.skip(ftype)
@@ -185,7 +183,7 @@ class ComposeUserMentions_args(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('ComposeUserMentions_args')
+        oprot.writeStructBegin('UploadUserMentions_args')
         if self.req_id is not None:
             oprot.writeFieldBegin('req_id', TType.I64, 1)
             oprot.writeI64(self.req_id)
@@ -193,16 +191,16 @@ class ComposeUserMentions_args(object):
         if self.usernames is not None:
             oprot.writeFieldBegin('usernames', TType.LIST, 2)
             oprot.writeListBegin(TType.STRING, len(self.usernames))
-            for iter279 in self.usernames:
-                oprot.writeString(iter279.encode('utf-8') if sys.version_info[0] == 2 else iter279)
+            for iter340 in self.usernames:
+                oprot.writeString(iter340.encode('utf-8') if sys.version_info[0] == 2 else iter340)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         if self.carrier is not None:
             oprot.writeFieldBegin('carrier', TType.MAP, 3)
             oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.carrier))
-            for kiter280, viter281 in self.carrier.items():
-                oprot.writeString(kiter280.encode('utf-8') if sys.version_info[0] == 2 else kiter280)
-                oprot.writeString(viter281.encode('utf-8') if sys.version_info[0] == 2 else viter281)
+            for kiter341, viter342 in self.carrier.items():
+                oprot.writeString(kiter341.encode('utf-8') if sys.version_info[0] == 2 else kiter341)
+                oprot.writeString(viter342.encode('utf-8') if sys.version_info[0] == 2 else viter342)
             oprot.writeMapEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -221,8 +219,8 @@ class ComposeUserMentions_args(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(ComposeUserMentions_args)
-ComposeUserMentions_args.thrift_spec = (
+all_structs.append(UploadUserMentions_args)
+UploadUserMentions_args.thrift_spec = (
     None,  # 0
     (1, TType.I64, 'req_id', None, None, ),  # 1
     (2, TType.LIST, 'usernames', (TType.STRING, 'UTF8', False), None, ),  # 2
@@ -230,17 +228,15 @@ ComposeUserMentions_args.thrift_spec = (
 )
 
 
-class ComposeUserMentions_result(object):
+class UploadUserMentions_result(object):
     """
     Attributes:
-     - success
      - se
 
     """
 
 
-    def __init__(self, success=None, se=None,):
-        self.success = success
+    def __init__(self, se=None,):
         self.se = se
 
     def read(self, iprot):
@@ -252,18 +248,7 @@ class ComposeUserMentions_result(object):
             (fname, ftype, fid) = iprot.readFieldBegin()
             if ftype == TType.STOP:
                 break
-            if fid == 0:
-                if ftype == TType.LIST:
-                    self.success = []
-                    (_etype285, _size282) = iprot.readListBegin()
-                    for _i286 in range(_size282):
-                        _elem287 = UserMention()
-                        _elem287.read(iprot)
-                        self.success.append(_elem287)
-                    iprot.readListEnd()
-                else:
-                    iprot.skip(ftype)
-            elif fid == 1:
+            if fid == 1:
                 if ftype == TType.STRUCT:
                     self.se = ServiceException()
                     self.se.read(iprot)
@@ -278,14 +263,7 @@ class ComposeUserMentions_result(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('ComposeUserMentions_result')
-        if self.success is not None:
-            oprot.writeFieldBegin('success', TType.LIST, 0)
-            oprot.writeListBegin(TType.STRUCT, len(self.success))
-            for iter288 in self.success:
-                iter288.write(oprot)
-            oprot.writeListEnd()
-            oprot.writeFieldEnd()
+        oprot.writeStructBegin('UploadUserMentions_result')
         if self.se is not None:
             oprot.writeFieldBegin('se', TType.STRUCT, 1)
             self.se.write(oprot)
@@ -306,9 +284,9 @@ class ComposeUserMentions_result(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(ComposeUserMentions_result)
-ComposeUserMentions_result.thrift_spec = (
-    (0, TType.LIST, 'success', (TType.STRUCT, [UserMention, None], False), None, ),  # 0
+all_structs.append(UploadUserMentions_result)
+UploadUserMentions_result.thrift_spec = (
+    None,  # 0
     (1, TType.STRUCT, 'se', [ServiceException, None], None, ),  # 1
 )
 fix_spec(all_structs)
