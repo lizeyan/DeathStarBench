@@ -40,6 +40,8 @@ spec:
     name: tcp2
   - port: 14268
     name: tcp3
+  - port: 16687
+    name: admin-http
   selector:
     death-star-project: social-network
     app-name: jaeger
@@ -64,6 +66,9 @@ spec:
         death-star-project: social-network
         app-name: jaeger
       name: jaeger
+      annotations:
+          prometheus.io/scrape: "true"
+          prometheus.io/port: "16686"
     spec:
       containers:
       - name: jaeger
@@ -71,4 +76,33 @@ spec:
         env:
         - name: COLLECTOR_ZIPKIN_HTTP_PORT
           value: "9411"
+        - name: SPAN_STORAGE_TYPE
+          value: "elasticsearch"
+        - name: ES_SERVER_URLS
+          value: "http://es-es-http:9200"
+        - name: ES_USERNAME
+          value: "elastic"
+        - name: ES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: es-es-elastic-user
+              key: elastic
       restartPolicy: Always
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: jaeger-components
+  namespace: social-network
+  labels:
+    release: prometheus
+spec:
+  podMetricsEndpoints:
+  - path: /metrics
+    port: admin-http
+  namespaceSelector:
+    matchNames:
+    - social-network
+  selector:
+    matchLabels:
+        app: jaeger
