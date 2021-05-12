@@ -42,6 +42,9 @@ spec:
         volumeMounts:
         - mountPath: /social-network-microservices/config/jaeger-config.yml
           name: jaeger-config-yml
+        volumeMounts:
+        - mountPath: /social-network-microservices/config/service-config.json
+          name: service-config-json
         ports:
         - containerPort: 9090
       restartPolicy: Always
@@ -49,4 +52,8 @@ spec:
       - name: jaeger-config-yml
         hostPath:
           path: /mnt/mfs/DeathStarBench/socialNetwork/config/jaeger-config.yml
+          type: File
+      - name: service-config-json
+        hostPath:
+          path: /mnt/mfs/DeathStarBench/socialNetwork/config/service-config.json
           type: File

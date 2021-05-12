@@ -64,7 +64,7 @@ request = function()
   local method = "POST"
   -- Use your cluster-ip here:
   -- original: local path = "http://10.68.39.88:8080/wrk2-api/post/compose"
-  local path = "http://10.108.29.192:8080/wrk2-api/post/compose"
+  local path = "http://11.2.35.11:8080/wrk2-api/post/compose"
   local headers = {}
   local body
   headers["Content-Type"] = "application/x-www-form-urlencoded"

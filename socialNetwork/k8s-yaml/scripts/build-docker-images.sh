@@ -15,6 +15,7 @@ IMAGE=social-network-microservices
 # ENTER THE ROOT FOLDER
 cd ../
 ROOT_FOLDER=$(pwd)
+echo ROOT_FOLDER=${ROOT_FOLDER}
 
 cd $ROOT_FOLDER
 $EXEC build -t "$REPO$USER"/"$IMAGE":"$TAG" -f Dockerfile .
