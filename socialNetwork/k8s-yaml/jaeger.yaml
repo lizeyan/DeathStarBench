@@ -42,6 +42,8 @@ spec:
     name: tcp3
   - port: 16687
     name: admin-http
+  - port: 14269
+    name: monitor
   selector:
     death-star-project: social-network
     app-name: jaeger
@@ -90,19 +92,13 @@ spec:
       restartPolicy: Always
 ---
 apiVersion: monitoring.coreos.com/v1
-kind: PodMonitor
+kind: ServiceMonitor
 metadata:
-  name: jaeger-components
+  name: sn-tracing
   namespace: social-network
-  labels:
-    release: prometheus
 spec:
-  podMetricsEndpoints:
-  - path: /metrics
-    port: admin-http
-  namespaceSelector:
-    matchNames:
-    - social-network
+  endpoints:
+  - port: monitor
   selector:
     matchLabels:
-        app: jaeger
+     app-name: jaeger

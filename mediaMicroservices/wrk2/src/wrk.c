@@ -57,7 +57,7 @@ static void usage() {
     printf("Usage: wrk <options> <url>                                       \n"
            "  Options:                                                       \n"
            "    -c, --connections <N>  Connections to keep open              \n"
-           "    -D, --dist        <S>  fixed, exp, norm, zipf                \n"
+           "    -D, --dist             fixed, exp, norm, zipf                \n"
            "    -P                     Print each request's latency          \n"
            "    -p                     Print 99th latency every 0.2s to file \n"
            "    -d, --duration    <T>  Duration of test                      \n"
@@ -66,7 +66,7 @@ static void usage() {
            "    -s, --script      <S>  Load Lua script file                  \n"
            "    -H, --header      <H>  Add header to request                 \n"
            "    -L  --latency          Print latency statistics              \n"
-           "    -T  --timeout     <T>  Socket/request timeout                \n"
+           "    -U  --timeout     <T>  Socket/request timeout                \n"
            "    -B, --batch_latency    Measure latency of whole              \n"
            "                           batches of pipelined ops              \n"
            "                           (as opposed to each op)               \n"
@@ -731,13 +731,11 @@ static struct option longopts[] = {
     { "help",           no_argument,       NULL, 'h' },
     { "version",        no_argument,       NULL, 'v' },
     { "rate",           required_argument, NULL, 'R' },
-    { "dist",           required_argument, NULL, 'D' },
     { NULL,             0,                 NULL,  0  }
 };
 
 static int parse_args(struct config *cfg, char **url, struct http_parser_url *parts, char **headers, int argc, char **argv) {
-    int c;
-    char **header = headers;
+    char c, **header = headers;
 
     memset(cfg, 0, sizeof(struct config));
     cfg->threads     = 2;
@@ -750,7 +748,7 @@ static int parse_args(struct config *cfg, char **url, struct http_parser_url *pa
     cfg->print_realtime_latency = false;
     cfg->dist = 0;
 
-    while ((c = getopt_long(argc, argv, "t:c:d:s:D:H:T:R:LPpBv?", longopts, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "t:c:d:s:D:H:T:R:LPpBrv?", longopts, NULL)) != -1) {
         switch (c) {
             case 't':
                 if (scan_metric(optarg, &cfg->threads)) return -1;
