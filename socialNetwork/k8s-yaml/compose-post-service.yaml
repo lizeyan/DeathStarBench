@@ -35,6 +35,7 @@ spec:
       labels: 
         death-star-project: social-network
         app-name: compose-post-service
+        injection: able
       name: compose-post-service
     spec:
       containers:

@@ -33,6 +33,7 @@ spec:
       labels: 
         death-star-project: social-network
         app-name: user-timeline-mongodb
+        injection: able
       name: user-timeline-mongodb
     spec:
       containers:

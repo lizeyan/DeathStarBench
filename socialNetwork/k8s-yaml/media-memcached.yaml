@@ -33,6 +33,7 @@ spec:
       labels: 
         death-star-project: social-network
         app-name: media-memcached
+        injection: able
       name: media-memcached
     spec:
       containers:

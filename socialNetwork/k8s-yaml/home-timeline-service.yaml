@@ -33,6 +33,7 @@ spec:
       labels: 
         death-star-project: social-network
         app-name: home-timeline-service
+        injection: able
       name: home-timeline-service
     spec:
       containers:

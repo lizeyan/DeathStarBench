@@ -33,6 +33,7 @@ spec:
       labels: 
         death-star-project: social-network
         app-name: compose-post-redis
+        injection: able
       name: compose-post-redis
     spec:
       containers:

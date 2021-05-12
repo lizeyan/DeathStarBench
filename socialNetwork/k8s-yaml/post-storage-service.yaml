@@ -33,6 +33,7 @@ spec:
       labels: 
         death-star-project: social-network
         app-name: post-storage-service
+        injection: able
       name: post-storage-service
     spec:
       containers:

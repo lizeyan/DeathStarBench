@@ -33,6 +33,7 @@ spec:
       labels: 
         death-star-project: social-network
         app-name: home-timeline-redis
+        injection: able
       name: home-timeline-redis
     spec:
       containers:

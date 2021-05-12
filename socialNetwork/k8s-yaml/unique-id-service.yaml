@@ -33,6 +33,7 @@ spec:
       labels: 
         death-star-project: social-network
         app-name: unique-id-service
+        injection: able
       name: unique-id-service
     spec:
       containers:

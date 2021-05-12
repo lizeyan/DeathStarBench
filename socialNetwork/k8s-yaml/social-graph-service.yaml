@@ -33,6 +33,7 @@ spec:
       labels: 
         death-star-project: social-network
         app-name: social-graph-service
+        injection: able
       name: social-graph-service
     spec:
       containers:

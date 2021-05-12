@@ -33,6 +33,7 @@ spec:
       labels: 
         death-star-project: social-network
         app-name: media-mongodb
+        injection: able
       name: media-mongodb
     spec:
       containers:
