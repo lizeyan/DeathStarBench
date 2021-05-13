@@ -5,3 +5,17 @@ metadata:
    name: social-network
    labels:
      death-star-project: social-network
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: limit-range
+  namespace: social-network
+spec:
+  limits:
+  - default:
+      memory: 1024Mi
+      cpu: 1000m
+    defaultRequest:
+      memory: 256Mi
+    type: Container
