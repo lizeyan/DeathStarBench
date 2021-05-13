@@ -26,6 +26,8 @@ local function decRandom(length)
   end
 end
 
+tmp_body = ""
+
 request = function()
   local user_index = math.random(1, 962)
   local username = "username_" .. tostring(user_index)
@@ -76,6 +78,20 @@ request = function()
     body   = "username=" .. username .. "&user_id=" .. user_id ..
         "&text=" .. text .. "&media_ids=" .. "&post_type=0"
   end
-
+  tmp_body = body
   return wrk.format(method, path, headers, body)
+end
+
+
+response = function(status, header, body)
+    if status ~= 200 then
+        print("Failed request. Status=" .. status .. " Body=" .. tmp_body)
+    else
+        print("Success request. Status=" .. status .. " Body=" .. tmp_body)
+    end
+end
+
+function urlEncode(s)
+     s = string.gsub(s, "([^%w%.%- ])", function(c) return string.format("%%%02X", string.byte(c)) end)
+    return string.gsub(s, " ", "+")
 end

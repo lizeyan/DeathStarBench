@@ -1,0 +1,6 @@
+cmake-build-debug-remote-host/*
+cmake-build-debug-remote/*
+wrk2/*
+gen-cpp/
+gen-lua/
+gen-py
