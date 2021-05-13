@@ -33,6 +33,7 @@ spec:
       labels: 
         death-star-project: media-microsvc
         app-name: movie-info-memcached
+        injection: able
       name: movie-info-memcached
     spec:
       containers:

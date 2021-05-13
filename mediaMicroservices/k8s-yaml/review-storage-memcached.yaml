@@ -33,6 +33,7 @@ spec:
       labels: 
         death-star-project: media-microsvc
         app-name: review-storage-memcached
+        injection: able
       name: review-storage-memcached
     spec:
       containers:

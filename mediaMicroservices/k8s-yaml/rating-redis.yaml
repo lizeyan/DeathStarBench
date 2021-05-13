@@ -33,6 +33,7 @@ spec:
       labels: 
         death-star-project: media-microsvc
         app-name: rating-redis
+        injection: able
       name: rating-redis
     spec:
       containers:

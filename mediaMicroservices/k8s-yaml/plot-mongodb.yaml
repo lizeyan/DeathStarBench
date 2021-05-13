@@ -33,6 +33,7 @@ spec:
       labels: 
         death-star-project: media-microsvc
         app-name: plot-mongodb
+        injection: able
       name: plot-mongodb
     spec:
       containers:

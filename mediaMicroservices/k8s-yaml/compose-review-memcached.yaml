@@ -33,6 +33,7 @@ spec:
       labels: 
         death-star-project: media-microsvc
         app-name: compose-review-memcached
+        injection: able
       name: compose-review-memcached
     spec:
       containers:

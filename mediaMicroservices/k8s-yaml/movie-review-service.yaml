@@ -33,6 +33,7 @@ spec:
       labels: 
         death-star-project: media-microsvc
         app-name: movie-review-service
+        injection: able
       name: movie-review-service
     spec:
       containers:
