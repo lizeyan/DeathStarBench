@@ -1025,11 +1025,11 @@ request = function()
   local user_index = math.random(1000)
   local username = "username_" .. tostring(user_index)
   local password = "password_" .. tostring(user_index)
-  local title = movie_titles[movie_index]
+  local title = urlEncode(movie_titles[movie_index])
   local rating = math.random(0, 10)
   local text = string.random(256)
 
-  local path = "http://127.0.0.1:8080/wrk2-api/review/compose"
+  local path = "http://10.68.24.13:8080/wrk2-api/review/compose"
   local method = "POST"
   local headers = {}
   local body = "username=" .. username .. "&password=" .. password .. "&title=" ..
@@ -1037,4 +1037,9 @@ request = function()
   headers["Content-Type"] = "application/x-www-form-urlencoded"
 
   return wrk.format(method, path, headers, body)
+end
+
+function urlEncode(s)
+     s = string.gsub(s, "([^%w%.%- ])", function(c) return string.format("%%%02X", string.byte(c)) end)
+    return string.gsub(s, " ", "+")
 end
