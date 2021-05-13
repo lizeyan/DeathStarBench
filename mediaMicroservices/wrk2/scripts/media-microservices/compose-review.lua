@@ -1021,7 +1021,7 @@ function string.random(length)
 end
 
 
-tmp_body = ""
+req = ""
 
 request = function()
   local movie_index = math.random(1000)
@@ -1037,16 +1037,19 @@ request = function()
   local headers = {}
   local body = "username=" .. username .. "&password=" .. password .. "&title=" ..
                   title .. "&rating=" .. rating .. "&text=" .. text
-  tmp_body = body
   headers["Content-Type"] = "application/x-www-form-urlencoded"
 
-  return wrk.format(method, path, headers, body)
+  tmp_req = wrk.format(method, path, headers, body)
+  req = tmp_req
+  return tmp_req
 end
 
 
 response = function(status, header, body)
     if status ~= 200 then
-        print("Failed request. Status=" .. status .. " Body=" .. tmp_body)
+        print("Failed request. Status=" .. status .. " Request=" .. req)
+    else
+        print("Success request. Status=" .. status .. " Request=" .. req)
     end
 end
 

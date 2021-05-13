@@ -105,6 +105,9 @@ local function read_home_timeline()
     return wrk.format(method, path, headers, nil)
   end
 
+
+req = ""
+
 request = function()
     cur_time = math.floor(socket.gettime())
     local read_home_timeline_ratio = 0.30
@@ -113,10 +116,20 @@ request = function()
   
     local coin = math.random()
     if coin < read_home_timeline_ratio then
-      return read_home_timeline()
+      tmp_req = read_home_timeline()
     elseif coin < read_home_timeline_ratio + read_user_timeline_ratio then
-      return read_user_timeline()
+      tmp_req = read_user_timeline()
     else 
-      return compose_post()
+      tmp_req = compose_post()
     end
+    req = tmp_req
+    return tmp_req
   end
+
+response = function(status, header, body)
+    if status ~= 200 then
+        print("Failed request. Status=" .. status .. " Request=" .. req)
+    else
+        print("Success request. Status=" .. status .. " Request=" .. req)
+    end
+end
