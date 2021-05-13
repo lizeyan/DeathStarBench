@@ -37,6 +37,21 @@ spec:
     spec:
       containers:
       - name: compose-review-service
-        image: yg397/media-microservices
+        image: docker.peidan.me/lizytalk/media-microservices
         command: ["ComposeReviewService"]
+        volumeMounts:
+        - mountPath: /media-microservices/config/jaeger-config.yml
+          name: jaeger-config-yml
+        volumeMounts:
+        - mountPath: /media-microservices/config/service-config.json
+          name: service-config-json
       restartPolicy: Always
+      volumes:
+      - name: jaeger-config-yml
+        hostPath:
+          path: /mnt/mfs/DeathStarBench/mediaMicroservices/config/jaeger-config.yml
+          type: File
+      - name: service-config-json
+        hostPath:
+          path: /mnt/mfs/DeathStarBench/mediaMicroservices/config/service-config.json
+          type: File
