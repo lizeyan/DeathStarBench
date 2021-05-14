@@ -57,3 +57,19 @@ spec:
   count: 1
   elasticsearchRef:
     name: es
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: es-proxy
+  namespace: media-microsvc
+spec:
+  ports:
+    - port: 9200
+      nodePort: 31083
+      targetPort: 9200
+      protocol: TCP
+  type: NodePort
+  selector:
+    common.k8s.elastic.co/type: elasticsearch
+    elasticsearch.k8s.elastic.co/cluster-name: es
