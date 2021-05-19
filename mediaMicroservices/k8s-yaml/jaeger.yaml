@@ -12,6 +12,7 @@ spec:
   ports:
   - port: 16686
     targetPort: 16686
+    nodePort: 31081
   selector:
     death-star-project: media-microsvc
     app-name: jaeger
