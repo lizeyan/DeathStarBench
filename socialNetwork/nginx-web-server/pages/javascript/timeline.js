@@ -9,7 +9,6 @@ function showTimeline(type) {
     if (start !== "" && stop !== "") {
         var params = "start=" + start + "&stop=" + stop;
         const Http = new XMLHttpRequest();
-        // const url = 'http://' + window.location.hostname + ':18080/api/user-timeline/read';
         const url = 'http://' + window.location.hostname + ':8080/api/' + type + '/read';
         Http.open("GET", url + "?" + params, true);
         Http.onreadystatechange = function () {
