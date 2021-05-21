@@ -45,3 +45,21 @@ cd wrk2
 
 #### View Jaeger traces
 View Jaeger traces by accessing `http://localhost:16686`
+
+### Troubleshooting
+#### key error collection: movie-info.movie-info index: movie_id_1 dup key
+``` sql
+db.getCollection("movie-info").aggregate([
+    { "$group": {
+        "_id": { "movie_id": "$movie_id" },
+        "dups": { "$push": "$_id" },
+        "count": { "$sum": 1 }
+    }},
+    { "$match": { "count": { "$gt": 1 } }}
+]).forEach(function(doc) {
+    doc.dups.shift();
+    db.getCollection("movie-info").remove({ "_id": {"$in": doc.dups }});
+});
+
+db.getCollection("movie-info").createIndex({"movie_id":1},{unique:true})
+```
