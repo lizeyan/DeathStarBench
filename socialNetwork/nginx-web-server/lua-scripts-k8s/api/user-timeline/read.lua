@@ -90,6 +90,7 @@ function _M.ReadUserTimeline()
     ngx.status = ngx.HTTP_UNAUTHORIZED
     ngx.header.content_type = "text/plain"
     ngx.say("Login token expired, please log in again")
+    span:finish()
     ngx.exit(ngx.HTTP_OK)
   else
     local client = GenericObjectPool:connection(
@@ -106,6 +107,7 @@ function _M.ReadUserTimeline()
         ngx.say("Get user-timeline failure: " .. ret.message)
         ngx.log(ngx.ERR, "Get user-timeline failure: " .. ret.message)
       end
+      span:finish()
       ngx.exit(ngx.HTTP_INTERNAL_SERVER_ERROR)
     else
       local user_timeline = _LoadTimeline(ret)
@@ -113,6 +115,7 @@ function _M.ReadUserTimeline()
       ngx.say(cjson.encode(user_timeline) )
     end
   end
+  span:finish()
   span:finish()
 end
 

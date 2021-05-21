@@ -89,6 +89,7 @@ function _M.ReadHomeTimeline()
   if (timestamp + ttl < ngx.time()) then
     ngx.status = ngx.HTTP_UNAUTHORIZED
     ngx.say("Login token expired, please log in again")
+    span:finish()
     ngx.exit(ngx.HTTP_OK)
   else
     local client = GenericObjectPool:connection(
@@ -105,6 +106,7 @@ function _M.ReadHomeTimeline()
         ngx.say("Get home-timeline failure: " .. ret.message)
         ngx.log(ngx.ERR, "Get home-timeline failure: " .. ret.message)
       end
+      span:finish()
       ngx.exit(ngx.HTTP_INTERNAL_SERVER_ERROR)
     else
       local home_timeline = _LoadTimeline(ret)

@@ -66,6 +66,7 @@ function _M.ReadUserTimeline()
     ngx.status = ngx.HTTP_BAD_REQUEST
     ngx.say("Incomplete arguments")
     ngx.log(ngx.ERR, "Incomplete arguments")
+    span:finish()
     ngx.exit(ngx.HTTP_BAD_REQUEST)
   end
 
@@ -84,6 +85,7 @@ function _M.ReadUserTimeline()
       ngx.say("Get user-timeline failure: " .. ret.message)
       ngx.log(ngx.ERR, "Get user-timeline failure: " .. ret.message)
     end
+    span:finish()
     ngx.exit(ngx.HTTP_INTERNAL_SERVER_ERROR)
   else
     local user_timeline = _LoadTimeline(ret)

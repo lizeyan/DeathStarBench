@@ -67,6 +67,7 @@ function _M.ReadHomeTimeline()
     ngx.status = ngx.HTTP_BAD_REQUEST
     ngx.say("Incomplete arguments")
     ngx.log(ngx.ERR, "Incomplete arguments")
+    span:finish()
     ngx.exit(ngx.HTTP_BAD_REQUEST)
   end
 
@@ -85,6 +86,7 @@ function _M.ReadHomeTimeline()
       ngx.say("Get home-timeline failure: " .. ret.message)
       ngx.log(ngx.ERR, "Get home-timeline failure: " .. ret.message)
     end
+    span:finish()
     ngx.exit(ngx.HTTP_INTERNAL_SERVER_ERROR)
   else
     local home_timeline = _LoadTimeline(ret)
