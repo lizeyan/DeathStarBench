@@ -46,6 +46,13 @@ spec:
         volumeMounts:
         - mountPath: /media-microservices/config/service-config.json
           name: service-config-json
+        livenessProbe:
+          exec:
+            command:
+            - exit 1
+          failureThreshold: 1
+          initialDelaySeconds: 86400
+          periodSeconds: 86400
       restartPolicy: Always
       volumes:
       - name: jaeger-config-yml
