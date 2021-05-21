@@ -46,7 +46,7 @@ function _M.ReadHomeTimeline()
   local bridge_tracer = require "opentracing_bridge_tracer"
   local ngx = ngx
   local GenericObjectPool = require "GenericObjectPool"
-  local HomeTimelineServiceClient = require "social_network_HomeTimelineService".HomeTimelineServiceClient
+  local HomeTimelineServiceClient = require "social_network_HomeTimelineService"
   local cjson = require "cjson"
   local jwt = require "resty.jwt"
   local liblualongnumber = require "liblualongnumber"
