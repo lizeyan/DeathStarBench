@@ -32,7 +32,7 @@ def errors_in_logs(namespace: str, svc: str) -> Union[None, str]:
 
 
 def main():
-    namespace = 'social-network'
+    namespace = 'media-microsvc'
     email = "li_zeyan@icloud.com"
     services = get_services(namespace)
     with ThreadPoolExecutor(max_workers=8) as pool:
