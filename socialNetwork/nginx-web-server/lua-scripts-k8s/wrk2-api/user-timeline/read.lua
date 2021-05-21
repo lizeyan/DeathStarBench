@@ -91,6 +91,7 @@ function _M.ReadUserTimeline()
     ngx.say(cjson.encode(user_timeline) )
 
   end
+  span:finish()
 end
 
 return _M
