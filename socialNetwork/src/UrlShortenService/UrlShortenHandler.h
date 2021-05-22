@@ -163,7 +163,7 @@ void UrlShortenHandler::UploadUrls(
         try {
           compose_post_client->UploadUrls(req_id, target_urls, writer_text_map);
         } catch (...) {
-          _compose_client_pool->Push(compose_post_client_wrapper);
+          _compose_client_pool->Remove(compose_post_client_wrapper);
           LOG(error) << "Failed to upload urls to compose-post-service";
           throw;
         }

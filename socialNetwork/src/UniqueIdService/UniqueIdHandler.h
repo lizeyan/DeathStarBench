@@ -133,7 +133,7 @@ void UniqueIdHandler::UploadUniqueId(
   try {
     compose_post_client->UploadUniqueId(req_id, post_id, post_type, writer_text_map);    
   } catch (...) {
-    _compose_client_pool->Push(compose_post_client_wrapper);
+    _compose_client_pool->Remove(compose_post_client_wrapper);
     LOG(error) << "Failed to upload unique-id to compose-post-service";
     throw;
   }

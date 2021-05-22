@@ -201,7 +201,7 @@ void UserTimelineHandler::ReadUserTimeline(
     post_ids_reply = post_ids_future.get();
   } catch (...) {
     LOG(error) << "Failed to read post_ids from user-timeline-redis";
-    _redis_client_pool->Push(redis_client_wrapper);
+    _redis_client_pool->Remove(redis_client_wrapper);
     throw;
   }
   _redis_client_pool->Push(redis_client_wrapper);
@@ -300,7 +300,7 @@ void UserTimelineHandler::ReadUserTimeline(
             post_client->ReadPosts(
                 _return_posts, req_id, post_ids, writer_text_map);
           } catch (...) {
-            _post_client_pool->Push(post_client_wrapper);
+            _post_client_pool->Remove(post_client_wrapper);
             LOG(error) << "Failed to read posts from post-storage-service";
             throw;
           }
@@ -351,7 +351,7 @@ void UserTimelineHandler::ReadUserTimeline(
       zadd_reply_future.get();
     } catch (...) {
       LOG(error) << "Failed to Update Redis Server";
-      _redis_client_pool->Push(redis_client_wrapper);
+      _redis_client_pool->Remove(redis_client_wrapper);
       throw;
     }
     _redis_client_pool->Push(redis_client_wrapper);

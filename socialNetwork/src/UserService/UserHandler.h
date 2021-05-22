@@ -253,7 +253,7 @@ void UserHandler::RegisterUserWithId(
     try {
       social_graph_client->InsertUser(req_id, user_id, writer_text_map);
     } catch (...) {
-      _social_graph_client_pool->Push(social_graph_client_wrapper);
+      _social_graph_client_pool->Remove(social_graph_client_wrapper);
       LOG(error) << "Failed to insert user to social-graph-client";
       throw;
     }
@@ -402,7 +402,7 @@ void UserHandler::RegisterUser(
     try {
       social_graph_client->InsertUser(req_id, user_id, writer_text_map);
     } catch (...) {
-      _social_graph_client_pool->Push(social_graph_client_wrapper);
+      _social_graph_client_pool->Remove(social_graph_client_wrapper);
       LOG(error) << "Failed to insert user to social-graph-service";
       throw;
     }
@@ -559,7 +559,7 @@ void UserHandler::UploadCreatorWithUsername(
     try {
       compose_post_client->UploadCreator(req_id, creator, writer_text_map);
     } catch (...) {
-      _compose_client_pool->Push(compose_post_client_wrapper);
+      _compose_client_pool->Remove(compose_post_client_wrapper);
       LOG(error) << "Failed to upload creator to compose-post-service";
       throw;
     }
@@ -628,7 +628,7 @@ void UserHandler::UploadCreatorWithUserId(
   try {
     compose_post_client->UploadCreator(req_id, creator, writer_text_map);
   } catch (...) {
-    _compose_client_pool->Push(compose_post_client_wrapper);
+    _compose_client_pool->Remove(compose_post_client_wrapper);
     LOG(error) << "Failed to upload creator to compose-post-service";
     throw;
   }

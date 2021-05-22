@@ -480,7 +480,7 @@ void ComposePostHandler::_ComposeAndUpload(
     ServiceException se;
     se.errorCode = ErrorCode::SE_REDIS_ERROR;
     se.message = "Failed to retrieve messages from Redis";
-    _redis_client_pool->Push(redis_client_wrapper);
+    _redis_client_pool->Remove(redis_client_wrapper);
     throw se;
   }
 
@@ -489,7 +489,7 @@ void ComposePostHandler::_ComposeAndUpload(
     ServiceException se;
     se.errorCode = ErrorCode::SE_REDIS_ERROR;
     se.message = "Failed to retrieve messages from Redis";
-    _redis_client_pool->Push(redis_client_wrapper);
+    _redis_client_pool->Remove(redis_client_wrapper);
     throw se;
   }
 
@@ -601,7 +601,7 @@ void ComposePostHandler::_UploadPostHelper(
     try {
       post_storage_client->StorePost(req_id, post, carrier);
     } catch (...) {
-      _post_storage_client_pool->Push(post_storage_client_wrapper);
+      _post_storage_client_pool->Remove(post_storage_client_wrapper);
       LOG(error) << "Failed to store post to post-storage-service";
       throw;
     }
@@ -631,7 +631,7 @@ void ComposePostHandler::_UploadUserTimelineHelper(
       user_timeline_client->WriteUserTimeline(req_id, post_id, user_id,
                                               timestamp, carrier);
     } catch (...) {
-      _user_timeline_client_pool->Push(user_timeline_client_wrapper);
+      _user_timeline_client_pool->Remove(user_timeline_client_wrapper);
       throw;
     }
     _user_timeline_client_pool->Push(user_timeline_client_wrapper);

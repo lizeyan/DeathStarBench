@@ -89,7 +89,7 @@ void MediaHandler::UploadMedia(
   try {
     compose_post_client->UploadMedia(req_id, media, writer_text_map);
   } catch (...) {
-    _compose_client_pool->Push(compose_post_client_wrapper);
+    _compose_client_pool->Remove(compose_post_client_wrapper);
     LOG(error) << "Failed to upload media to compose-post-service";
     throw;
   }

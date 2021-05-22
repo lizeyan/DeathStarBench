@@ -232,7 +232,7 @@ void UserMentionHandler::UploadUserMentions(
     compose_post_client->UploadUserMentions(req_id, user_mentions,
                                             writer_text_map);
   } catch (...) {
-    _compose_client_pool->Push(compose_post_client_wrapper);
+    _compose_client_pool->Remove(compose_post_client_wrapper);
     LOG(error) << "Failed to upload user_mentions to user-mention-service";
     throw;
   }  

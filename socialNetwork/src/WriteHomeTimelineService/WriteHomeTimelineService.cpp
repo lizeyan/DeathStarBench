@@ -71,7 +71,7 @@ void OnReceivedWorker(const AMQP::Message &msg) {
                                         writer_text_map);
     } catch (...) {
       LOG(error) << "Failed to get followers from social-network-service";
-      _social_graph_client_pool->Push(social_graph_client_wrapper);
+      _social_graph_client_pool->Remove(social_graph_client_wrapper);
       throw;
     }
     _social_graph_client_pool->Push(social_graph_client_wrapper);

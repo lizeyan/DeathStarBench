@@ -93,7 +93,7 @@ void TextHandler::UploadText(
           url_client->UploadUrls(return_urls, req_id, urls, writer_text_map);
         } catch (...) {
           LOG(error) << "Failed to upload urls to url-shorten-service";
-          _url_client_pool->Push(url_client_wrapper);
+          _url_client_pool->Remove(url_client_wrapper);
           throw;
         }    
         
@@ -117,7 +117,7 @@ void TextHandler::UploadText(
                                                   writer_text_map);
         } catch (...) {
           LOG(error) << "Failed to upload user_mentions to user-mention-service";
-          _user_mention_client_pool->Push(user_mention_client_wrapper);
+          _user_mention_client_pool->Remove(user_mention_client_wrapper);
           throw;
         }
 
@@ -164,7 +164,7 @@ void TextHandler::UploadText(
           compose_post_client->UploadText(req_id, updated_text, writer_text_map);
         } catch (...) {
           LOG(error) << "Failed to upload text to compose-post-service";
-          _compose_client_pool->Push(compose_post_client_wrapper);
+          _compose_client_pool->Remove(compose_post_client_wrapper);
           throw;
         }          
         _compose_client_pool->Push(compose_post_client_wrapper);
