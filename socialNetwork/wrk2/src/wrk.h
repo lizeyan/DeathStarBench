@@ -54,7 +54,6 @@ typedef struct {
     errors errors;
     struct connection *cs;
     FILE* ff;
-    FILE* rf;
 } thread;
 
 typedef struct {

@@ -10,9 +10,6 @@
 // Max recordable latency of 1 day
 #define MAX_LATENCY 24L * 60 * 60 * 1000000
 
-// write all request latencies to file or not
-#define WRITE_TO_FILE 1
-
 uint64_t raw_latency[MAXTHREADS][MAXL];
 
 static struct config {
@@ -60,7 +57,7 @@ static void usage() {
     printf("Usage: wrk <options> <url>                                       \n"
            "  Options:                                                       \n"
            "    -c, --connections <N>  Connections to keep open              \n"
-           "    -D, --dist             fixed, exp, norm, zipf                \n"
+           "    -D, --dist        <S>  fixed, exp, norm, zipf                \n"
            "    -P                     Print each request's latency          \n"
            "    -p                     Print 99th latency every 0.2s to file \n"
            "    -d, --duration    <T>  Duration of test                      \n"
@@ -69,7 +66,7 @@ static void usage() {
            "    -s, --script      <S>  Load Lua script file                  \n"
            "    -H, --header      <H>  Add header to request                 \n"
            "    -L  --latency          Print latency statistics              \n"
-           "    -U  --timeout     <T>  Socket/request timeout                \n"
+           "    -T  --timeout     <T>  Socket/request timeout                \n"
            "    -B, --batch_latency    Measure latency of whole              \n"
            "                           batches of pipelined ops              \n"
            "                           (as opposed to each op)               \n"
@@ -117,7 +114,6 @@ int main(int argc, char **argv) {
     statistics.requests = stats_alloc(10);
     thread *threads = zcalloc(cfg.threads * sizeof(thread));
 
-
     hdr_init(1, MAX_LATENCY, 3, &(statistics.requests->histogram));
 
     lua_State *L = script_create(cfg.script, url, headers);
@@ -139,8 +135,8 @@ int main(int argc, char **argv) {
         t->throughput    = throughput;
         t->stop_at       = stop_at;
         t->complete      = 0;
-        t->monitored     = 0;            // # of processed requests
-        t->target        = throughput/5; // used for checking whether it's time to record tail latency; 200ms (100/s -> every 20 requests -> every 0.2s) -Haoran
+        t->monitored     = 0;
+        t->target        = throughput/10; //Shuang
         t->accum_latency = 0;
         t->L = script_create(cfg.script, url, headers);
         script_init(L, t, argc - optind, &argv[optind]);
@@ -171,7 +167,8 @@ int main(int argc, char **argv) {
 
     char *time = format_time_s(cfg.duration);
     printf("Running %s test @ %s\n", time, url);
-    printf("  %"PRIu64" threads and %"PRIu64" connections with rates %"PRIu64"/s across all threads\n", cfg.threads, cfg.connections, cfg.rate);
+    printf("  %"PRIu64" threads and %"PRIu64" connections\n",
+            cfg.threads, cfg.connections);
 
     uint64_t start    = time_us();
     uint64_t complete = 0;
@@ -203,19 +200,15 @@ int main(int argc, char **argv) {
 
         hdr_add(latency_histogram, t->latency_histogram);
         hdr_add(real_latency_histogram, t->real_latency_histogram);
-	// printf("> # of completed requests after calibration: %"PRIu64"(%"PRIu64")\n", t->latency_histogram->total_count, t->complete);
-       
-        // print all response latency stats (across all threads) in one file	
+        
         if (cfg.print_all_responses) {
-            char filename[22] = {0};
-            snprintf(filename, 22, "%" PRIu64 ".txt", i);
-	    // printf("> Realtime latency recorded at file: %s\n", filename);
+            char filename[10] = {0};
+            sprintf(filename, "%" PRIu64 ".txt", i);
             FILE* ff = fopen(filename, "w");
             uint64_t nnum=MAXL;
             if ((t->complete) < nnum) nnum = t->complete;
-            for (uint64_t j=1; j < nnum; ++j) {
+            for (uint64_t j=1; j < nnum; ++j)
                 fprintf(ff, "%" PRIu64 "\n", raw_latency[i][j]);
-	    }
             fclose(ff);
         }
     }
@@ -229,9 +222,6 @@ int main(int argc, char **argv) {
     latency_stats->max = hdr_max(latency_histogram);
     latency_stats->histogram = latency_histogram;
 
-    /* 
-    printf("\n----------------------------------------------------------\n");
-    printf(" Stats & Histogram Data:\n");
     print_stats_header();
     print_stats("Latency", latency_stats, format_time_us);
     print_stats("Req/Sec", statistics.requests, format_metric);
@@ -249,34 +239,20 @@ int main(int argc, char **argv) {
     if (errors.connect || errors.read || errors.write || errors.timeout) {
         printf("  Socket errors: connect %d, read %d, write %d, timeout %d\n",
                errors.connect, errors.read, errors.write, errors.timeout);
-    } else {
-	printf("  No socket errors\n");
     }
 
     if (errors.status) {
-        printf("  Non-2xx/3xx (failed) responses: %d\n", errors.status);
-    } else {
-	printf("  No non-2xx or 3xx responses\n");
+        printf("  Non-2xx or 3xx responses: %d\n", errors.status);
     }
 
-    printf("\nRequests/sec: %9.2Lf\n", req_per_s);
+    printf("Requests/sec: %9.2Lf\n", req_per_s);
     printf("Transfer/sec: %10sB\n", format_binary(bytes_per_s));
-    printf("Total Time Duration: %Lf\n", runtime_s); // Time Duration
 
-    char filename[50];
-    snprintf(filename, 50, "/gpfs/gpfs0/home/haoranq4/output.txt");  // hard-coded for evaluation
-    FILE* mf = fopen(filename, "a");
-    fprintf(mf, "%"PRIu64"\t%d\t%9.2Lf\n", complete, errors.timeout, req_per_s);
-    fflush(mf);
-    fclose(mf);
-    */
-
-    /*
     if (script_has_done(L)) {
         script_summary(L, runtime_us, complete, bytes);
         script_errors(L, &errors);
         script_done(L, latency_stats, statistics.requests);
-    }*/
+    }
 
     return 0;
 }
@@ -299,25 +275,14 @@ void *thread_main(void *arg) {
     
     thread->ff = NULL;
     if ((cfg.print_realtime_latency) && (thread->tid == 0)) {
-	// only the first thread's 99th percentile latency is written to a file during the runtime
         char filename[50];
-        snprintf(filename, 50, "%" PRIu64 ".txt", thread->tid);
-	printf("> Realtime 99th-percentile latency recorded at file: %s\n", filename);
+        snprintf(filename, 50, "/filer-01/datasets/nginx/%" PRIu64 ".txt", thread->tid);
         thread->ff = fopen(filename, "w");
     }
 
-    thread->rf = NULL; // print each request latency to the file
-    if (WRITE_TO_FILE) {
-        char filename[50];
-	snprintf(filename, 50, "%" PRIu64 "-requests.txt", thread->tid);
-	printf("> Realtime request latency recorded at file: %s\n", filename);
-	thread->rf = fopen(filename, "w");
-    }
 
-    double throughput = (thread->throughput / 1000000.0) / thread->connections; // per connection throughput in 1 microsecond
-    double interval = 1000000*thread->connections/thread->throughput;           // interval calculated based on the throughput
-    printf("> Throughput per connection per microsecond: %f\n", throughput);
-    printf("> Interal (based on throughput): %fus\n", interval);
+    double throughput = (thread->throughput / 1000000.0) / thread->connections;
+
     connection *c = thread->cs;
 
     for (uint64_t i = 0; i < thread->connections; i++, c++) {
@@ -325,7 +290,7 @@ void *thread_main(void *arg) {
         c->ssl        = cfg.ctx ? SSL_new(cfg.ctx) : NULL;
         c->request    = request;
         c->length     = length;
-        c->interval   = 1000000*thread->connections/thread->throughput; // 1/throughput
+        c->interval   = 1000000*thread->connections/thread->throughput;
         c->throughput = throughput;
         c->complete   = 0;
         c->estimate   = 0;
@@ -345,13 +310,7 @@ void *thread_main(void *arg) {
 
     aeDeleteEventLoop(loop);
     zfree(thread->cs);
-    if (cfg.print_realtime_latency && thread->tid == 0) {
-	fclose(thread->ff);
-    }
-
-    if (WRITE_TO_FILE) {
-        fclose(thread->rf);
-    }
+    if (cfg.print_realtime_latency && thread->tid == 0) fclose(thread->ff);
 
     return NULL;
 }
@@ -491,7 +450,7 @@ static int response_body(http_parser *parser, const char *at, size_t len) {
 
 uint64_t gen_zipf(connection *conn)
 {
-    static int first = 1;         // Static first time flag
+    static int first = 1;      // Static first time flag
     static double c = 0;          // Normalization constant
     static double scalar = 0;
     double z;                     // Uniform random number (0 < z < 1)
@@ -587,10 +546,7 @@ static int response_complete(http_parser *parser) {
     int status = parser->status_code;
 
     thread->complete++;
-    
-    // print real time info
-    // printf("TID: %"PRIu64" - completed %"PRIu64"\n", thread->tid, thread->complete);
-        
+    //printf("complete %"PRIu64"\n", thread->complete);
     thread->requests++;
 
     if (status > 399) {
@@ -611,30 +567,21 @@ static int response_complete(http_parser *parser) {
 
     // Record if needed, either last in batch or all, depending in cfg:
     if (cfg.record_all_responses) {
-        // printf("complete %"PRIu64" @ %"PRIu64"\n", c->complete, now);
+        //printf("complete %"PRIu64" @ %"PRIu64"\n", c->complete, now);
         assert(now > c->actual_latency_start[c->complete & MAXO] );
         uint64_t actual_latency_timing = now - c->actual_latency_start[c->complete & MAXO];
         hdr_record_value(thread->latency_histogram, actual_latency_timing);
         hdr_record_value(thread->real_latency_histogram, actual_latency_timing);
-
-        // write to file
-        // tid,status,now,latency
-	if (WRITE_TO_FILE) {
-            fprintf(thread->rf, "%"PRIu64",%"PRIu64",%"PRIu64",%"PRIu64"\n", thread->tid, status, now, actual_latency_timing);
-            fflush(thread->rf);
-	}
-
+    
         thread->monitored++;
         thread->accum_latency += actual_latency_timing;
         if (thread->monitored == thread->target) {       
             if (cfg.print_realtime_latency && thread->tid == 0) {
-		// record 99th-percentile latency every 0.2 seconds (approximately 0.2s because we are counting # of processed requests)
-                fprintf(thread->ff, "%" PRId64 "\t%" PRId64 "\n", hdr_value_at_percentile(thread->real_latency_histogram, 99), now);
+                fprintf(thread->ff, "%" PRId64 "\n", hdr_value_at_percentile(thread->real_latency_histogram, 99));
                 fflush(thread->ff);
             }
             thread->monitored = 0;
             thread->accum_latency = 0;
-	    // reset the real_latency_histogram -- so it can reflect the realtime latency histogram during the previous period of time
             hdr_reset(thread->real_latency_histogram);
         }
         if (cfg.print_all_responses && ((thread->complete) < MAXL)) 
@@ -784,12 +731,13 @@ static struct option longopts[] = {
     { "help",           no_argument,       NULL, 'h' },
     { "version",        no_argument,       NULL, 'v' },
     { "rate",           required_argument, NULL, 'R' },
+    { "dist",           required_argument, NULL, 'D' },
     { NULL,             0,                 NULL,  0  }
 };
 
 static int parse_args(struct config *cfg, char **url, struct http_parser_url *parts, char **headers, int argc, char **argv) {
-    char **header = headers;
     int c;
+    char **header = headers;
 
     memset(cfg, 0, sizeof(struct config));
     cfg->threads     = 2;
@@ -802,7 +750,7 @@ static int parse_args(struct config *cfg, char **url, struct http_parser_url *pa
     cfg->print_realtime_latency = false;
     cfg->dist = 0;
 
-    while ((c = getopt_long(argc, argv, "t:c:d:s:D:H:T:R:LPpBrv?", longopts, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "t:c:d:s:D:H:T:R:LPpBv?", longopts, NULL)) != -1) {
         switch (c) {
             case 't':
                 if (scan_metric(optarg, &cfg->threads)) return -1;
@@ -829,10 +777,10 @@ static int parse_args(struct config *cfg, char **url, struct http_parser_url *pa
             case 'H':
                 *header++ = optarg;
                 break;
-            case 'P': /* print each requests's latency */
+            case 'P': /* Shuang: print each requests's latency */
                 cfg->print_all_responses = true;
                 break;
-            case 'p': /* print 99th latency every 0.2s (only for thread #1) */
+            case 'p': /* Shuang: print avg latency every 0.2s */
                 cfg->print_realtime_latency = true;
                 break;
             case 'L':
@@ -902,7 +850,7 @@ static void print_units(long double n, char *(*fmt)(long double), int width) {
 }
 
 static void print_stats(char *name, stats *stats, char *(*fmt)(long double)) {
-    // uint64_t max = stats->max;
+    uint64_t max = stats->max;
     long double mean  = stats_summarize(stats);
     long double stdev = stats_stdev(stats, mean);
 

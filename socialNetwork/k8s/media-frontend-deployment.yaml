@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --file ../docker-compose.yml --volumes hostPath
+    kompose.version: 1.22.0 (955b78124)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: media-frontend
+  name: media-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: media-frontend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --file ../docker-compose.yml --volumes hostPath
+        kompose.version: 1.22.0 (955b78124)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: media-frontend
+        death-star-project: social-network
+        app-name: compose-post-service
+        injection: able
+    spec:
+      containers:
+        - image: yg397/media-frontend:xenial
+          name: media-frontend
+          ports:
+            - containerPort: 8080
+          resources: {}
+          volumeMounts:
+            - mountPath: /usr/local/openresty/nginx/lua-scripts
+              name: media-frontend-hostpath0
+            - mountPath: /usr/local/openresty/nginx/conf/nginx.conf
+              name: media-frontend-hostpath1
+      hostname: media-frontend
+      restartPolicy: Always
+      volumes:
+        - hostPath:
+            path: /Users/lizytalk/Projects/DeathStarBench/socialNetwork/media-frontend/lua-scripts
+          name: media-frontend-hostpath0
+        - hostPath:
+            path: /Users/lizytalk/Projects/DeathStarBench/socialNetwork/media-frontend/conf/nginx.conf
+          name: media-frontend-hostpath1
+status: {}

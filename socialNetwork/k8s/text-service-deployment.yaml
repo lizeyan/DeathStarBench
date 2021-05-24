@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --file ../docker-compose.yml --volumes hostPath
+    kompose.version: 1.22.0 (955b78124)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: text-service
+  name: text-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: text-service
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --file ../docker-compose.yml --volumes hostPath
+        kompose.version: 1.22.0 (955b78124)
+      creationTimestamp: null
+      labels:
+        io.kompsose.service: text-service
+        death-star-project: social-network
+        app-name: compose-post-service
+        injection: able
+    spec:
+      containers:
+        - command:
+            - TextService
+          image: yg397/social-network-microservices:latest
+          name: text-service
+          resources: {}
+          volumeMounts:
+            - mountPath: /social-network-microservices/config
+              name: text-service-hostpath0
+            - mountPath: /keys
+              name: text-service-hostpath1
+      hostname: text-service
+      restartPolicy: Always
+      volumes:
+        - hostPath:
+            path: /Users/lizytalk/Projects/DeathStarBench/socialNetwork/config
+          name: text-service-hostpath0
+        - hostPath:
+            path: /Users/lizytalk/Projects/DeathStarBench/socialNetwork/keys
+          name: text-service-hostpath1
+status: {}

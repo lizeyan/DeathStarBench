@@ -10,7 +10,8 @@ target_include_directories(
     SocialGraphService PRIVATE
     ${MONGOC_INCLUDE_DIRS}
     /usr/local/include/jaegertracing
-    /usr/local/include/cpp_redis
+    /usr/local/include/hiredis
+    /usr/local/include/sw
 )
 
 target_link_libraries(
@@ -22,10 +23,11 @@ target_link_libraries(
     nlohmann_json::nlohmann_json
     Boost::log
     Boost::log_setup
-    OpenSSL::SSL
     /usr/local/lib/libjaegertracing.so
-    /usr/local/lib/libcpp_redis.a
-    /usr/local/lib/libtacopie.a
+    /usr/local/lib/libhiredis.a
+    /usr/local/lib/libhiredis_ssl.a
+    /usr/local/lib/libredis++.a
+    OpenSSL::SSL
 )
 
 install(TARGETS SocialGraphService DESTINATION ./)

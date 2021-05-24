@@ -8,7 +8,8 @@ local ngx = ngx
 local GenericObjectPool = Object:new({
     __type = 'GenericObjectPool',
     maxTotal = 100,
-    maxIdleTime = 60000
+    maxIdleTime = 10000,
+    timeout = 10000
     })
 function GenericObjectPool:init(conf)
 end
@@ -17,7 +18,8 @@ end
 --ngx nginx容器变量
 --
 function GenericObjectPool:connection(thriftClient,ip,port)
-    local client = RpcClientFactory:createClient(thriftClient,ip,port)
+    local ssl = ngx.shared.config:get("ssl")
+    local client = RpcClientFactory:createClient(thriftClient,ip,port,self.timeout,ssl)
     return client
 end
 --
@@ -29,17 +31,26 @@ function GenericObjectPool:returnConnection(client)
         if (client.iprot.trans.trans:isOpen())then
             client.iprot.trans.trans:setKeepAlive(self.maxIdleTime, self.maxTotal)
         else
-            ngx.log(ngx.ERR,"return rpc client fail ,socket close.")
+            ngx.log(ngx.ERR,"return rpc client fail, socket close.")
         end
     end
 end
---
---设置连接池的大小
---Maxtotal 连接池大小
---
+
+-- Connection pool size
 function GenericObjectPool:setMaxTotal(maxTotal)
-  self.maxTotal = maxTotal
+    self.maxTotal = maxTotal
 end
+
+-- Keep alive timeout
+function GenericObjectPool:setmaxIdleTime(maxIdleTime)
+    self.maxIdleTime = maxIdleTime
+end
+
+-- Keep RPC read/write timeout
+function GenericObjectPool:setTimeout(timeout)
+    self.timeout = timeout
+end
+
 function GenericObjectPool:clear()
 
 end

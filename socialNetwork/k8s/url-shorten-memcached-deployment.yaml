@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --file ../docker-compose.yml --volumes hostPath
+    kompose.version: 1.22.0 (955b78124)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: url-shorten-memcached
+  name: url-shorten-memcached
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: url-shorten-memcached
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --file ../docker-compose.yml --volumes hostPath
+        kompose.version: 1.22.0 (955b78124)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: url-shorten-memcached
+        death-star-project: social-network
+        app-name: compose-post-service
+        injection: able
+    spec:
+      containers:
+        - image: memcached
+          name: url-shorten-memcached
+          resources: {}
+      hostname: url-shorten-memcached
+      restartPolicy: Always
+status: {}
