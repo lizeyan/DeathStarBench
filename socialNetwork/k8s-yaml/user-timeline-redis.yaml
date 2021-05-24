@@ -1,0 +1,57 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-timeline-redis
+  labels:
+    death-star-project: social-network
+    app-name: user-timeline-redis
+  namespace: social-network
+spec:
+  ports:
+  - port: 6379
+  selector:
+    death-star-project: social-network
+    app-name: user-timeline-redis
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-timeline-redis
+  labels:
+    death-star-project: social-network
+    app-name: user-timeline-redis
+  namespace: social-network
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      death-star-project: social-network
+      app-name: user-timeline-redis
+  template:
+    metadata:
+      labels: 
+        death-star-project: social-network
+        app-name: user-timeline-redis
+        injection: able
+      name: user-timeline-redis
+    spec:
+      containers:
+      - name: user-timeline-redis
+        image: redis
+        volumeMounts:
+        - mountPath: /social-network-microservices/config
+          name: config
+        - mountPath: /keys
+          name: keys
+        command: /social-network-microservices/config/redis.conf
+      restartPolicy: Always
+      volumes:
+      - name: config
+        hostPath:
+          path: /mnt/mfs/DeathStarBench/socialNetwork/config
+          type: Directory
+      - name: keys
+        hostPath:
+          path: /mnt/mfs/DeathStarBench/socialNetwork/keys
+          type: Directory

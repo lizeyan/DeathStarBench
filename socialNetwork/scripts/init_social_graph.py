@@ -1,3 +1,6 @@
+import os
+from subprocess import getoutput
+
 import aiohttp
 import asyncio
 import sys
@@ -122,7 +125,7 @@ async def compose(addr, nodes):
 
 if __name__ == '__main__':
   filename_default = "datasets/social-graph/socfb-Reed98/socfb-Reed98.mtx"
-  ip_default = "127.0.0.1"
+  ip_default = getoutput("kubectl get -n social-network svc/nginx-thrift -o json | jq -r '.spec.clusterIP'")
   port_default = "8080"
 
   parser = argparse.ArgumentParser("DeathStarBench social graph initializer.")
