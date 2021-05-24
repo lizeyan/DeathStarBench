@@ -73,3 +73,19 @@ spec:
   selector:
     common.k8s.elastic.co/type: elasticsearch
     elasticsearch.k8s.elastic.co/cluster-name: es
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kbn-proxy
+  namespace: social-network
+spec:
+  ports:
+  - port: 5601
+    nodePort: 30084
+    targetPort: 5601
+    protocol: TCP
+  type: NodePort
+  selector:
+    common.k8s.elastic.co/type: kibana
+    kibana.k8s.elastic.co/name: kbn
