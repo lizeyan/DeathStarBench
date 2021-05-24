@@ -44,7 +44,7 @@ spec:
           name: config
         - mountPath: /keys
           name: keys
-        command: --config /social-network-microservices/config/mongod.conf
+        args: ["--config", "/social-network-microservices/config/mongod.conf"]
       restartPolicy: Always
       volumes:
       - name: config

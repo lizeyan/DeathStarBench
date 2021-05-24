@@ -44,7 +44,7 @@ spec:
           name: config
         - mountPath: /keys
           name: keys
-        command: /social-network-microservices/config/redis.conf
+        args: ["/social-network-microservices/config/redis.conf"]
       restartPolicy: Always
       volumes:
       - name: config
